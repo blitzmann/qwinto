@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./entry-row.component.scss'],
 })
 export class EntryRowComponent {
-  @Input() entries;
+  @Input() data;
 }

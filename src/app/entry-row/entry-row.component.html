@@ -1,5 +1,5 @@
-<div class="row-container">
-  <div *ngFor="let entry of entries">
+<div class="row-container" [style.background-color]="data.color">
+  <div *ngFor="let entry of data.entries">
     <app-entry
       *ngIf="entry"
       [bonus]="entry.bonus"
