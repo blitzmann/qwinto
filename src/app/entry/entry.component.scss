@@ -1,0 +1,70 @@
+// div {
+//   width: 100px;
+//   height: 100px;
+//   background-color: #ffffff66;
+//   border: 1px solid black;
+//   &.bonus {
+//     clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+//     border: 2px solid black;
+//   }
+//   &:not(.bonus) {
+//     border-radius: 50%;
+//   }
+// }
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.container {
+  display: inline-block;
+  position: relative;
+  width: 150px;
+  height: 150px;
+
+  &.bonus {
+    background: #00000044;
+    box-sizing: border-box;
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+
+    & > div {
+      background-color: #ffffffbb;
+      position: absolute;
+      top: 2px; /* equal to border thickness */
+      left: 2px; /* equal to border thickness */
+      width: 146px; /* container height - (border thickness * 2) */
+      height: 146px; /* container height - (border thickness * 2) */
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    }
+
+    & ~ .value {
+      padding-top: 10px;
+    }
+  }
+
+  &:not(.bonus) {
+    border-radius: 50%;
+    background-color: #00000044;
+
+    & > div {
+      background-color: #ffffffbb;
+      position: absolute;
+      top: 2px; /* equal to border thickness */
+      left: 2px; /* equal to border thickness */
+      width: 146px; /* container height - (border thickness * 2) */
+      height: 146px; /* container height - (border thickness * 2) */
+      border-radius: 50%;
+    }
+  }
+}
+
+.value {
+  position: absolute;
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-size: 80px;
+}

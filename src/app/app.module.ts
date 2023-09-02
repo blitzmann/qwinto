@@ -10,6 +10,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import { PlayerListComponent } from './player-list/player-list.component';
 import { DieComponent } from './die/die.component';
+import { EntryComponent } from './entry/entry.component';
+import { EntryRowComponent } from './entry-row/entry-row.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { DieComponent } from './die/die.component';
     HomeComponent,
     PlayerListComponent,
     DieComponent,
+    EntryComponent,
+    EntryRowComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [
