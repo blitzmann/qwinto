@@ -16,11 +16,16 @@ export class HomeComponent {
     private router: Router
   ) {
     this.WebsocketService.messages.subscribe((msg) => {
-      if (msg.action !== 'roomCode') {
-        return;
+      if (msg.action === 'roomCode') {
+        // created a room
+        const { roomCode, playerID } = msg.payload;
+        this.router.navigate([roomCode, playerID]);
       }
-      const { roomCode, playerID } = msg.payload;
-      this.router.navigate([roomCode, playerID]);
+      if (msg.action === 'playerJoined') {
+        // joined a room. The client recieves this message if they've been added tot he room, so random clients shouldn't recieve it
+        const { player } = msg.payload;
+        this.router.navigate([this.roomCode, player.id]);
+      }
     });
   }
 
@@ -30,5 +35,10 @@ export class HomeComponent {
       payload: { playerName: this.playerName },
     });
   }
-  public join() {}
+  public join() {
+    this.WebsocketService.messages.next({
+      action: 'joinRoom',
+      payload: { playerName: this.playerName, roomCode: this.roomCode },
+    });
+  }
 }

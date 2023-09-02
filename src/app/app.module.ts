@@ -8,9 +8,17 @@ import { FormsModule } from '@angular/forms';
 import { GameRoomComponent } from './game-room/game-room.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HomeComponent } from './home/home.component';
+import { PlayerListComponent } from './player-list/player-list.component';
+import { DieComponent } from './die/die.component';
 
 @NgModule({
-  declarations: [AppComponent, GameRoomComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    GameRoomComponent,
+    HomeComponent,
+    PlayerListComponent,
+    DieComponent,
+  ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [
     WebsocketService,
