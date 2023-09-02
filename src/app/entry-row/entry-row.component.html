@@ -1,9 +1,11 @@
-<ol>
-  <li *ngFor="let entry of entries">
+<div class="row-container">
+  <div *ngFor="let entry of entries">
     <app-entry
       *ngIf="entry"
       [bonus]="entry.bonus"
       [value]="entry.value"
     ></app-entry>
-  </li>
-</ol>
+    <!-- If there is no entry, just add a blank element. This is needed for some weird positioning quirk -->
+    <span *ngIf="!entry"></span>
+  </div>
+</div>
