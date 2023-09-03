@@ -4,7 +4,10 @@
       *ngIf="entry"
       [bonus]="entry.bonus"
       [value]="entry.value"
+      (click)="entry._selectable && setRoll(entry)"
+      [class.selectable]="playersTurn && entry._selectable"
     ></app-entry>
+
     <!-- If there is no entry, just add a blank element. This is needed for some weird positioning quirk -->
     <span *ngIf="!entry"></span>
   </div>

@@ -1,64 +1,7 @@
-<p>game-room works!</p>
+<button (click)="startGame()">Start Game</button>
 <div class="room-code">Room Code: {{ roomCode }}</div>
 <app-player-list></app-player-list>
-<app-die [value]="1" color="purple"></app-die>
-<app-die [value]="3" color="orange"></app-die>
-<app-die [value]="6" color="yellow"></app-die>
-<!--<app-entry [bonus]="true" value="34"></app-entry>
-<app-entry [bonus]="false" value="12"></app-entry> -->
-<app-entry-row
-  [data]="{
-    color: 'orangered',
-    offset: 0,
-    entries: [
-      { value: 1 },
-      { value: 1, bonus: true },
-      { value: 1 },
-      null,
-      { value: 1 },
-      { value: 1, bonus: true },
-      { value: 1 },
-      { value: 1 },
-      { value: 1 },
-      { value: 1 }
-    ]
-  }"
-></app-entry-row>
 
-<app-entry-row
-  [data]="{
-    color: '#d1c714',
-    offset: 0,
-    entries: [
-      { value: 1 },
-      { value: 1 },
-      { value: 1 },
-      { value: 1 },
-      { value: 1 },
-      null,
-      { value: 1 },
-      { value: 1, bonus: true },
-      { value: 1 },
-      { value: 1 }
-    ]
-  }"
-></app-entry-row>
+<app-game-sheet></app-game-sheet>
 
-<app-entry-row
-  [data]="{
-    color: '#2e3796',
-    offset: 0,
-    entries: [
-      { value: 1 },
-      { value: 1 },
-      { value: 1, bonus: true },
-      { value: 1 },
-      null,
-      { value: 1 },
-      { value: 1 },
-      { value: 1 },
-      { value: 1 },
-      { value: 1, bonus: true }
-    ]
-  }"
-></app-entry-row>
+<app-die-selection></app-die-selection>

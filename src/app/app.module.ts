@@ -12,6 +12,8 @@ import { PlayerListComponent } from './player-list/player-list.component';
 import { DieComponent } from './die/die.component';
 import { EntryComponent } from './entry/entry.component';
 import { EntryRowComponent } from './entry-row/entry-row.component';
+import { GameSheetComponent } from './game-sheet/game-sheet.component';
+import { DieSelectionComponent } from './die-selection/die-selection.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { EntryRowComponent } from './entry-row/entry-row.component';
     DieComponent,
     EntryComponent,
     EntryRowComponent,
+    GameSheetComponent,
+    DieSelectionComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [

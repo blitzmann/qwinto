@@ -1,0 +1,12 @@
+<div class="dice-container">
+  <app-die
+    *ngFor="let die of dice"
+    [class.selected]="die.selected"
+    [value]="die.value"
+    [color]="die.color"
+    (click)="selectDie(die)"
+  ></app-die>
+</div>
+<button (click)="rollSelected()" [disabled]="!playersTurn">Roll</button>
+
+My Turn: {{ playersTurn }}

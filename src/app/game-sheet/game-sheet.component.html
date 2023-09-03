@@ -1,0 +1,5 @@
+<app-entry-row
+  *ngFor="let row of playerSheet.rows"
+  [data]="row"
+  [style.left]="row.offset * 37 + 'px'"
+></app-entry-row>

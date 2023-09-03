@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
-
+import { GameService } from '../game.service';
 @Component({
   selector: 'app-game-room',
   templateUrl: './game-room.component.html',
@@ -13,10 +13,14 @@ export class GameRoomComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private WebsocketService: WebsocketService
+    private WebsocketService: WebsocketService,
+    private GameService: GameService
   ) {
     this.WebsocketService.messages.subscribe((msg) => {
       if (msg.action === 'gameState') {
+      }
+      if (msg.action === 'gameStarted') {
+        // Game started command will send whose turn it is
       }
     });
   }
@@ -26,6 +30,9 @@ export class GameRoomComponent implements OnInit {
       this.roomCode = params['roomCode'];
       this.playerID = params['playerID'];
 
+      this.GameService.roomCode = this.roomCode;
+      this.GameService.playerID = this.playerID;
+
       this.WebsocketService.messages.next({
         action: 'gameState',
         payload: {
@@ -33,6 +40,12 @@ export class GameRoomComponent implements OnInit {
           playerID: this.playerID,
         },
       });
+    });
+  }
+
+  public startGame() {
+    this.WebsocketService.messages.next({
+      action: 'startGame',
     });
   }
 }

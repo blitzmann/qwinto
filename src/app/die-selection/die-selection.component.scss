@@ -1,0 +1,22 @@
+.dice-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+app-die {
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+  &.selected {
+    transform: translateY(-20px);
+  }
+  cursor: pointer;
+}
+
+:host {
+  position: fixed;
+  bottom: 0;
+  background-color: #ffffff88;
+  padding: 30px;
+  margin: 0 auto;
+}
