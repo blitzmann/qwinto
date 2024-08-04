@@ -27,6 +27,7 @@ export interface IPlayer {
 
 export interface IPlayerSheet {
   rows: IEntryRow[];
+  failed: ({ value: number | null; bonus?: boolean } | null)[];
 }
 
 export interface IEntryRow {
@@ -34,4 +35,11 @@ export interface IEntryRow {
   key: string;
   offset: number;
   entries: ({ value: number | null; bonus?: boolean } | null)[];
+}
+
+export type dieColors = 'purple' | 'yellow' | 'orange';
+
+export interface IDie {
+  color: dieColors;
+  value: number;
 }

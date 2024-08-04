@@ -2,6 +2,7 @@ import {
   ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -10,6 +11,7 @@ import { Server, Socket } from 'socket.io';
 import {
   Events,
   ICreateRoomRequest,
+  IDie,
   IJoinRoomRequest,
   IPlayer,
   IPlayerSheet,
@@ -25,7 +27,7 @@ const { v4: uuidv4 } = require('uuid');
     origin: '*',
   },
 })
-export class EventsGateway implements OnGatewayConnection {
+export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
 
@@ -51,6 +53,8 @@ export class EventsGateway implements OnGatewayConnection {
     if (!room) return;
 
     const player = this.generatePlayer(room.code, data.playerName, client.id);
+
+    this.cacheManager.set(`client-${client.id}`, data.roomCode, 60 * 60 * 24); // 12 hours
 
     if (room.players.length === 0) player.isAdmin = true;
 
@@ -118,6 +122,44 @@ export class EventsGateway implements OnGatewayConnection {
     this.server.to(data.roomCode).emit(Events.START_GAME, room.turn);
   }
 
+  @SubscribeMessage(Events.ROLL_ATTEMPT)
+  async rollAttempt(
+    @MessageBody() data: IDie[],
+    @ConnectedSocket() client: Socket
+  ) {
+    // ensure that turn can be attempted.
+    const roomCode = await this.cacheManager.get<string>(`client-${client.id}`);
+    if (!roomCode) {
+      return; // todo: error
+    }
+    const room = await this.cacheManager.get<IRoom>(roomCode);
+
+    if (room?.turn.attempt >= room?.settings.rollAttempts) {
+      return; // todo: error
+    }
+
+    // generate random values
+    data.forEach((die) => (die.value = Math.floor(Math.random() * 6) + 1));
+
+    if (!room) {
+      return; // todo: error
+    }
+
+    const player = room.players.find((x) => x.socketID == client.id);
+    if (!player) {
+      return; // todo: error
+    }
+
+    room.turn = {
+      ...room.turn,
+      attempt: room.turn.attempt + 1,
+      player: room.players.find((x) => x.socketID == client.id),
+      die: data,
+    };
+
+    return data;
+  }
+
   @SubscribeMessage('identity')
   async identity(@MessageBody() data: number): Promise<number> {
     return data;
@@ -125,6 +167,10 @@ export class EventsGateway implements OnGatewayConnection {
 
   handleConnection(client: any, ...args: any[]) {
     console.log(`Client connected: ${client.id}`);
+  }
+
+  handleDisconnect(client: any) {
+    console.warn(`Client disconnected: ${client.id}`);
   }
 
   private async generateRoomCode() {

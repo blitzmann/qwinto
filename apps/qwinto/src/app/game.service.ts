@@ -15,7 +15,7 @@ export class GameService {
   public rollSum!: number;
   public gameState!: IRoom;
   public players$ = new Subject<IPlayer[]>();
-  public myTurn$ = new BehaviorSubject<boolean>(false);
+  public myTurn$ = new BehaviorSubject<boolean>(true);
   public gameStarted$ = new BehaviorSubject<boolean>(false);
 
   constructor(private socket: Socket) {

@@ -30,6 +30,8 @@ export class HomeComponent {
     //     this.router.navigate([this.roomCode, player.id]);
     //   }
     // });
+    this.playerName = 'Ryan';
+    this.create();
   }
 
   public create() {

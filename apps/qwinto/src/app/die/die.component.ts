@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { dieColors } from '../../../../../libs/lib/src';
 
-export type dieColors = 'purple' | 'yellow' | 'orange';
 @Component({
   selector: 'app-die',
   templateUrl: './die.component.html',

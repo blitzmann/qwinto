@@ -6,4 +6,6 @@ export enum Events {
 
   PLAYER_JOINED = 'player_joined',
   PLAYER_LEFT = 'player_left',
+
+  ROLL_ATTEMPT = 'roll_attempt',
 }
