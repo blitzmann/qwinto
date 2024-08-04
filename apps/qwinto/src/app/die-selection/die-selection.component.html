@@ -7,6 +7,6 @@
     (click)="selectDie(die)"
   ></app-die>
 </div>
-<button (click)="rollSelected()" [disabled]="!playersTurn">Roll</button>
+<button (click)="rollSelected()" [disabled]="!(myTurn$ | async)">Roll</button>
 
-My Turn: {{ playersTurn }}
+My Turn: {{ myTurn$ | async }}

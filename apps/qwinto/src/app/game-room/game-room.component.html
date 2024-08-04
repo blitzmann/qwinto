@@ -1,4 +1,6 @@
-<button (click)="startGame()">Start Game</button>
+<button (click)="startGame()" *ngIf="!(gameStarted$ | async)">
+  Start Game
+</button>
 <div class="room-code">Room Code: {{ roomCode }}</div>
 <app-player-list></app-player-list>
 

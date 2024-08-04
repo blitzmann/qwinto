@@ -2,6 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
+import { Socket } from 'ngx-socket-io';
+import {
+  Events,
+  IPlayer,
+  IPlayerSheet,
+  IRoom,
+} from '../../../../../libs/lib/src';
+import { Subject } from 'rxjs';
+
 @Component({
   selector: 'app-game-room',
   templateUrl: './game-room.component.html',
@@ -10,19 +19,26 @@ import { GameService } from '../game.service';
 export class GameRoomComponent implements OnInit {
   public roomCode!: string;
   public playerID!: string;
+  public gameStarted$ = this.GameService.gameStarted$;
+  public playerSheet$ = new Subject<IPlayerSheet>();
 
   constructor(
     private route: ActivatedRoute,
-    private WebsocketService: WebsocketService,
-    private GameService: GameService
+    private GameService: GameService,
+    private socket: Socket
   ) {
-    this.WebsocketService.messages.subscribe((msg) => {
-      if (msg.action === 'gameState') {
-      }
-      if (msg.action === 'gameStarted') {
-        // Game started command will send whose turn it is
-      }
+    this.GameService.players$.subscribe((players) => {
+      const me = players.find((x) => x.id === this.GameService.playerID);
+      if (!me) return;
+      this.playerSheet$.next(me?.sheet);
     });
+    // this.WebsocketService.messages.subscribe((msg) => {
+    //   if (msg.action === 'gameState') {
+    //   }
+    //   if (msg.action === 'gameStarted') {
+    //     // Game started command will send whose turn it is
+    //   }
+    // });
   }
 
   ngOnInit(): void {
@@ -33,19 +49,24 @@ export class GameRoomComponent implements OnInit {
       this.GameService.roomCode = this.roomCode;
       this.GameService.playerID = this.playerID;
 
-      this.WebsocketService.messages.next({
-        action: 'gameState',
-        payload: {
+      this.socket.emit(
+        Events.GAME_STATE,
+        {
           roomCode: this.roomCode,
           playerID: this.playerID,
         },
-      });
+        (data) => {
+          debugger;
+          this.GameService.gameState = data;
+          this.GameService.players$.next(data.players);
+        }
+      );
     });
   }
 
   public startGame() {
-    this.WebsocketService.messages.next({
-      action: 'startGame',
+    this.socket.emit(Events.START_GAME, {
+      roomCode: this.GameService.roomCode,
     });
   }
 }

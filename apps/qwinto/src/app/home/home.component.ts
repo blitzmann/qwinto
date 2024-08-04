@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { WebsocketService } from '../services/websocket.service';
+import { GameService } from '../game.service';
 import { Router } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
+import { Events } from '../../../../../libs/lib/src';
 
 @Component({
   selector: 'app-home',
@@ -12,33 +14,45 @@ export class HomeComponent {
   public roomCode!: string;
 
   constructor(
-    private WebsocketService: WebsocketService,
-    private router: Router
+    private GameService: GameService,
+    private router: Router,
+    private socket: Socket
   ) {
-    this.WebsocketService.messages.subscribe((msg) => {
-      if (msg.action === 'roomCode') {
-        // created a room
-        const { roomCode, playerID } = msg.payload;
-        this.router.navigate([roomCode, playerID]);
-      }
-      if (msg.action === 'playerJoined') {
-        // joined a room. The client recieves this message if they've been added tot he room, so random clients shouldn't recieve it
-        const { player } = msg.payload;
-        this.router.navigate([this.roomCode, player.id]);
-      }
-    });
+    // this.WebsocketService.messages.subscribe((msg) => {
+    //   if (msg.action === 'roomCode') {
+    //     // created a room
+    //     const { roomCode, playerID } = msg.payload;
+    //     this.router.navigate([roomCode, playerID]);
+    //   }
+    //   if (msg.action === 'playerJoined') {
+    //     // joined a room. The client recieves this message if they've been added tot he room, so random clients shouldn't recieve it
+    //     const { player } = msg.payload;
+    //     this.router.navigate([this.roomCode, player.id]);
+    //   }
+    // });
   }
 
   public create() {
-    this.WebsocketService.messages.next({
-      action: 'createRoom',
-      payload: { playerName: this.playerName },
-    });
+    this.socket.emit(
+      Events.CREATE_ROOM,
+      {
+        playerName: this.playerName,
+      },
+      this.handleJoin.bind(this)
+    );
   }
   public join() {
-    this.WebsocketService.messages.next({
-      action: 'joinRoom',
-      payload: { playerName: this.playerName, roomCode: this.roomCode },
-    });
+    this.socket.emit(
+      Events.JOIN_ROOM,
+      {
+        roomCode: this.roomCode,
+        playerName: this.playerName,
+      },
+      this.handleJoin.bind(this)
+    );
+  }
+
+  private handleJoin(data) {
+    this.router.navigate([data.roomCode, data.playerID]);
   }
 }

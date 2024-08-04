@@ -8,27 +8,25 @@ import { GameService } from '../game.service';
 })
 export class EntryRowComponent {
   @Input() data;
-  public get playersTurn() {
-    return this.GameService.playersTurn;
-  }
 
   public rollSum = -1;
+  public myTurn$ = this.GameService.myTurn$;
 
   constructor(
     private WebsocketService: WebsocketService,
     private GameService: GameService
   ) {
-    this.WebsocketService.messages.subscribe((msg) => {
-      if (msg.action === 'rollSetAccepted') {
-        if (this.data.key === msg.payload.rowKey) {
-          this.data.entries[msg.payload.entryIdx].value = msg.payload.rollSum;
-        }
-      }
-    });
+    // this.WebsocketService.messages.subscribe((msg) => {
+    //   if (msg.action === 'rollSetAccepted') {
+    //     if (this.data.key === msg.payload.rowKey) {
+    //       this.data.entries[msg.payload.entryIdx].value = msg.payload.rollSum;
+    //     }
+    //   }
+    // });
   }
 
   public setRoll(entry) {
-    if (!this.playersTurn) return;
+    if (!this.GameService.myTurn$.value) return;
 
     this.WebsocketService.messages.next({
       action: 'rollSet',

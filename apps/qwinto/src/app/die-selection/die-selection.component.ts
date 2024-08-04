@@ -17,27 +17,23 @@ export class DieSelectionComponent {
   ];
 
   private intervalID;
-
-  public get playersTurn() {
-    return this.GameService.playersTurn;
-  }
-
+  public myTurn$ = this.GameService.myTurn$;
   constructor(
     private WebsocketService: WebsocketService,
     private GameService: GameService
   ) {
-    this.WebsocketService.messages.subscribe((msg) => {
-      if (msg.action === 'rollDiceResponse') {
-        clearInterval(this.intervalID);
-        this.intervalID = null;
-        for (let die of msg.payload.dice) {
-          let myDie = this.dice.find((x) => x.color === die.color);
-          if (myDie) {
-            myDie.value = die.value;
-          }
-        }
-      }
-    });
+    // this.WebsocketService.messages.subscribe((msg) => {
+    //   if (msg.action === 'rollDiceResponse') {
+    //     clearInterval(this.intervalID);
+    //     this.intervalID = null;
+    //     for (let die of msg.payload.dice) {
+    //       let myDie = this.dice.find((x) => x.color === die.color);
+    //       if (myDie) {
+    //         myDie.value = die.value;
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   private simulateDiceRole(selectedDice) {

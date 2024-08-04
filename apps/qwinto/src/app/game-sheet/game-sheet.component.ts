@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
 import { EntryRowComponent } from '../entry-row/entry-row.component';
+import { BehaviorSubject } from 'rxjs';
 
 type Entry = { value: number; bonus?: boolean; _selectable?: boolean };
 
@@ -11,89 +12,42 @@ type Entry = { value: number; bonus?: boolean; _selectable?: boolean };
   styleUrls: ['./game-sheet.component.scss'],
 })
 export class GameSheetComponent {
-  @Input() playerSheet = {
-    rows: [
-      {
-        color: 'orangered',
-        key: 'orange',
-        offset: 2,
-        entries: [
-          { value: null },
-          { value: null, bonus: true },
-          { value: 5 },
-          null,
-          { value: null },
-          { value: 10, bonus: true },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-        ],
-      },
-      {
-        color: '#d1c714',
-        key: 'yellow',
-        offset: 1,
-        entries: [
-          { value: null },
-          { value: null },
-          { value: 4 },
-          { value: null },
-          { value: null },
-          null,
-          { value: null },
-          { value: null, bonus: true },
-          { value: null },
-          { value: null },
-        ],
-      },
-      {
-        color: '#2e3796',
-        key: 'purple',
-        offset: 0,
-        entries: [
-          { value: null },
-          { value: null },
-          { value: null, bonus: true },
-          { value: null },
-          null,
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null },
-          { value: null, bonus: true },
-        ],
-      },
-    ],
-  };
-
   public rollSum = -1;
+
+  public playerSheet;
+
   constructor(
     private WebsocketService: WebsocketService,
     private GameService: GameService
   ) {
-    this.WebsocketService.messages.subscribe((msg) => {
-      if (
-        msg.action === 'rollDiceResponse' &&
-        msg.payload.playerID === this.GameService.playerID
-      ) {
-        for (let dieRoll of msg.payload.dice) {
-          const row = this.playerSheet.rows.find(
-            (x) => x.key === dieRoll.color
-          );
-          if (row) {
-            // determine which entries it can go on
-            this.rollSum = msg.payload.rollSum;
-            this.GameService.rollSum = this.rollSum;
-            this.markEntriesAsSelectable(
-              row,
-              this.rollSum,
-              this.playerSheet.rows
-            );
-          }
-        }
-      }
+    this.GameService.players$.subscribe((players) => {
+      debugger;
+      const me = players.find((x) => x.id === this.GameService.playerID);
+      if (!me) return; // todo: error
+      this.playerSheet = me.sheet;
     });
+    // this.WebsocketService.messages.subscribe((msg) => {
+    //   if (
+    //     msg.action === 'rollDiceResponse' &&
+    //     msg.payload.playerID === this.GameService.playerID
+    //   ) {
+    //     for (let dieRoll of msg.payload.dice) {
+    //       const row = this.playerSheet.rows.find(
+    //         (x) => x.key === dieRoll.color
+    //       );
+    //       if (row) {
+    //         // determine which entries it can go on
+    //         this.rollSum = msg.payload.rollSum;
+    //         this.GameService.rollSum = this.rollSum;
+    //         this.markEntriesAsSelectable(
+    //           row,
+    //           this.rollSum,
+    //           this.playerSheet.rows
+    //         );
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   markEntriesAsSelectable(row, checkNumber, allRows) {

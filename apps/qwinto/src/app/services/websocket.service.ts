@@ -67,18 +67,18 @@ export interface Message {
 export class WebsocketService {
   public messages: any;
 
-  constructor() {
-    this.messages = webSocket<Message>({
-      url: CHAT_URL,
-      serializer: (msg) => {
-        console.log('%c ↑', 'color: #bada55', msg);
-        return JSON.stringify(msg);
-      },
-      deserializer(data) {
-        const msg = JSON.parse(data.data);
-        console.log('%c ↓', 'color: #d5cbec', msg);
-        return msg;
-      },
-    });
-  }
+  // constructor() {
+  //   this.messages = webSocket<Message>({
+  //     url: CHAT_URL,
+  //     serializer: (msg) => {
+  //       console.log('%c ↑', 'color: #bada55', msg);
+  //       return JSON.stringify(msg);
+  //     },
+  //     deserializer(data) {
+  //       const msg = JSON.parse(data.data);
+  //       console.log('%c ↓', 'color: #d5cbec', msg);
+  //       return msg;
+  //     },
+  //   });
+  // }
 }

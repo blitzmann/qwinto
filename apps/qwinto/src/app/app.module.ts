@@ -14,6 +14,9 @@ import { EntryComponent } from './entry/entry.component';
 import { EntryRowComponent } from './entry-row/entry-row.component';
 import { GameSheetComponent } from './game-sheet/game-sheet.component';
 import { DieSelectionComponent } from './die-selection/die-selection.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
@@ -27,7 +30,12 @@ import { DieSelectionComponent } from './die-selection/die-selection.component';
     GameSheetComponent,
     DieSelectionComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    SocketIoModule.forRoot(config),
+  ],
   providers: [
     WebsocketService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
