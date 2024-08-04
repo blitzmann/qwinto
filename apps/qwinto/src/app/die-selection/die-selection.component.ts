@@ -4,8 +4,13 @@ import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
 import { Socket } from 'ngx-socket-io';
 import { Events, IDie } from '../../../../../libs/lib/src';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { DieComponent } from '../die/die.component';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule, DieComponent],
   selector: 'app-die-selection',
   templateUrl: './die-selection.component.html',
   styleUrls: ['./die-selection.component.scss'],

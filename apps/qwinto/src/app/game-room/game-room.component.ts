@@ -10,8 +10,19 @@ import {
   IRoom,
 } from '../../../../../libs/lib/src';
 import { Subject } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { GameSheetComponent } from '../game-sheet/game-sheet.component';
+import { DieSelectionComponent } from '../die-selection/die-selection.component';
+import { PlayerListComponent } from '../player-list/player-list.component';
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    GameSheetComponent,
+    DieSelectionComponent,
+    PlayerListComponent,
+  ],
   selector: 'app-game-room',
   templateUrl: './game-room.component.html',
   styleUrls: ['./game-room.component.scss'],

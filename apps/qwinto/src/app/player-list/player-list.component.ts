@@ -3,8 +3,11 @@ import { WebsocketService } from '../services/websocket.service';
 import { Socket } from 'ngx-socket-io';
 import { Events } from '../../../../../libs/lib/src';
 import { GameService } from '../game.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   selector: 'app-player-list',
   templateUrl: './player-list.component.html',
   styleUrls: ['./player-list.component.scss'],

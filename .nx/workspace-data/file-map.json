@@ -1,0 +1,654 @@
+{
+  "version": "6.0",
+  "nxVersion": "19.5.6",
+  "deps": {
+    "@angular/animations": "18.1.3",
+    "@angular/common": "18.1.3",
+    "@angular/compiler": "18.1.3",
+    "@angular/core": "18.1.3",
+    "@angular/forms": "18.1.3",
+    "@angular/platform-browser": "18.1.3",
+    "@angular/platform-browser-dynamic": "18.1.3",
+    "@angular/router": "18.1.3",
+    "@nestjs/cache-manager": "^2.1.0",
+    "@nestjs/common": "^10.0.2",
+    "@nestjs/core": "^10.0.2",
+    "@nestjs/platform-express": "^10.0.2",
+    "@nestjs/platform-socket.io": "^10.2.4",
+    "@nestjs/websockets": "^10.2.4",
+    "axios": "1.6.0",
+    "cache-manager": "^5.2.3",
+    "class-transformer": "^0.5.1",
+    "jsonwebtoken": "^9.0.2",
+    "ngx-socket-io": "^4.5.1",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "0.14.8",
+    "@angular-devkit/build-angular": "18.1.3",
+    "@angular-devkit/core": "18.1.3",
+    "@angular-devkit/schematics": "18.1.3",
+    "@angular/cli": "~16.2.1",
+    "@angular/compiler-cli": "18.1.3",
+    "@nestjs/schematics": "^10.0.1",
+    "@nestjs/testing": "^10.0.2",
+    "@nx/angular": "19.5.6",
+    "@nx/eslint-plugin": "19.5.6",
+    "@nx/jest": "19.5.6",
+    "@nx/js": "19.5.6",
+    "@nx/linter": "19.5.6",
+    "@nx/nest": "19.5.6",
+    "@nx/node": "19.5.6",
+    "@nx/webpack": "19.5.6",
+    "@nx/workspace": "19.5.6",
+    "@schematics/angular": "18.1.3",
+    "@types/jasmine": "~4.3.0",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.16.9",
+    "@typescript-eslint/eslint-plugin": "7.16.0",
+    "@typescript-eslint/parser": "7.16.0",
+    "eslint": "8.57.0",
+    "eslint-config-prettier": "9.0.0",
+    "jasmine-core": "~4.6.0",
+    "jest": "^29.4.1",
+    "jest-environment-node": "^29.4.1",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "nx": "19.5.6",
+    "prettier": "^2.6.2",
+    "ts-jest": "^29.1.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.5.4"
+  },
+  "pathMappings": {
+    "@lib": [
+      "libs/lib/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": "migrations.json",
+        "hash": "13241487410103834673"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "2310634406664533036"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "18037487075392171512"
+      },
+      {
+        "file": "tools/generators/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "tools/tsconfig.tools.json",
+        "hash": "16088922570277978783"
+      },
+      {
+        "file": "libs/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "5336636969995539451"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "18315524891129148814"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "13044518069027839699"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "12333515226966617182"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "8865097869854018350"
+      },
+      {
+        "file": "package.json",
+        "hash": "12912278483676039528"
+      },
+      {
+        "file": "karma.conf.js",
+        "hash": "9656364725710720620"
+      },
+      {
+        "file": "README.md",
+        "hash": "223126244074156452"
+      },
+      {
+        "file": ".eslintignore",
+        "hash": "7663861978715868291"
+      },
+      {
+        "file": ".editorconfig",
+        "hash": "6686520031028425313"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "9430166341120122740"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "6597208061681618998"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "6205149810306817216"
+      },
+      {
+        "file": "nx.json",
+        "hash": "4878880028114851269"
+      }
+    ],
+    "projectFileMap": {
+      "qwinto": [
+        {
+          "file": "apps/qwinto/project.json",
+          "hash": "12247495553837390635"
+        },
+        {
+          "file": "apps/qwinto/src/app/app-routing.module.ts",
+          "hash": "16264825912739708998",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/app.component.html",
+          "hash": "17816966185630879015"
+        },
+        {
+          "file": "apps/qwinto/src/app/app.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/qwinto/src/app/app.component.spec.ts",
+          "hash": "4923181600327503877",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/app.component.ts",
+          "hash": "7503924838805817047",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/app.module.ts",
+          "hash": "10680433582098864807",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/platform-browser",
+            "npm:@angular/forms",
+            "npm:@angular/common",
+            "npm:ngx-socket-io"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/die-selection/die-selection.component.html",
+          "hash": "3647225366133363957"
+        },
+        {
+          "file": "apps/qwinto/src/app/die-selection/die-selection.component.scss",
+          "hash": "18280565070055045423"
+        },
+        {
+          "file": "apps/qwinto/src/app/die-selection/die-selection.component.spec.ts",
+          "hash": "12423060413046212451",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/die-selection/die-selection.component.ts",
+          "hash": "15084410616772705044",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "npm:ngx-socket-io",
+            "lib",
+            "npm:@angular/common",
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/die/die.component.html",
+          "hash": "3555275302406867529"
+        },
+        {
+          "file": "apps/qwinto/src/app/die/die.component.scss",
+          "hash": "9990283001760633714"
+        },
+        {
+          "file": "apps/qwinto/src/app/die/die.component.spec.ts",
+          "hash": "989858677174508781",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/die/die.component.ts",
+          "hash": "7182131937836658328",
+          "deps": [
+            "npm:@angular/core",
+            "lib",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/entry-row/entry-row.component.html",
+          "hash": "7080884106528202175"
+        },
+        {
+          "file": "apps/qwinto/src/app/entry-row/entry-row.component.scss",
+          "hash": "15390170571184901175"
+        },
+        {
+          "file": "apps/qwinto/src/app/entry-row/entry-row.component.spec.ts",
+          "hash": "8081090151312014995",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/entry-row/entry-row.component.ts",
+          "hash": "645793656350933526",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/entry/entry.component.html",
+          "hash": "2608683923414001852"
+        },
+        {
+          "file": "apps/qwinto/src/app/entry/entry.component.scss",
+          "hash": "15859985344415264718"
+        },
+        {
+          "file": "apps/qwinto/src/app/entry/entry.component.spec.ts",
+          "hash": "10395852232198773750",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/entry/entry.component.ts",
+          "hash": "8800643799122988028",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/game-room/game-room.component.html",
+          "hash": "14543770251937073616"
+        },
+        {
+          "file": "apps/qwinto/src/app/game-room/game-room.component.scss",
+          "hash": "16569905490840849284"
+        },
+        {
+          "file": "apps/qwinto/src/app/game-room/game-room.component.spec.ts",
+          "hash": "7374856667398849295",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/game-room/game-room.component.ts",
+          "hash": "727951754922052816",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:ngx-socket-io",
+            "lib",
+            "npm:rxjs",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/game-sheet/game-sheet.component.html",
+          "hash": "6854496927679985168"
+        },
+        {
+          "file": "apps/qwinto/src/app/game-sheet/game-sheet.component.scss",
+          "hash": "4596674019856035933"
+        },
+        {
+          "file": "apps/qwinto/src/app/game-sheet/game-sheet.component.spec.ts",
+          "hash": "17109223175235723981",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/game-sheet/game-sheet.component.ts",
+          "hash": "6978180928599670983",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/game.service.spec.ts",
+          "hash": "13599626002142493658",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/game.service.ts",
+          "hash": "8424764872083850071",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "npm:ngx-socket-io",
+            "lib"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/home/home.component.html",
+          "hash": "9642086531802509202"
+        },
+        {
+          "file": "apps/qwinto/src/app/home/home.component.scss",
+          "hash": "4953062159750529904"
+        },
+        {
+          "file": "apps/qwinto/src/app/home/home.component.spec.ts",
+          "hash": "9695398928474306082",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/home/home.component.ts",
+          "hash": "9793247067196547775",
+          "deps": [
+            "lib"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/player-list/player-list.component.html",
+          "hash": "11797371199069220834"
+        },
+        {
+          "file": "apps/qwinto/src/app/player-list/player-list.component.scss",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/qwinto/src/app/player-list/player-list.component.spec.ts",
+          "hash": "17607240329629513998",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/player-list/player-list.component.ts",
+          "hash": "12559075561542809970",
+          "deps": [
+            "npm:@angular/core",
+            "npm:ngx-socket-io",
+            "lib",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/app/services/websocket.service.ts",
+          "hash": "8380538769045339962",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/qwinto/src/favicon.ico",
+          "hash": "3464744996580215640"
+        },
+        {
+          "file": "apps/qwinto/src/index.html",
+          "hash": "17349088496665121548"
+        },
+        {
+          "file": "apps/qwinto/src/main.ts",
+          "hash": "3259059517603285449",
+          "deps": [
+            "npm:@angular/platform-browser-dynamic"
+          ]
+        },
+        {
+          "file": "apps/qwinto/src/styles.scss",
+          "hash": "14732310541565361151"
+        },
+        {
+          "file": "apps/qwinto/tsconfig.app.json",
+          "hash": "2381145790002888757"
+        },
+        {
+          "file": "apps/qwinto/tsconfig.spec.json",
+          "hash": "17700927949365452100"
+        }
+      ],
+      "server": [
+        {
+          "file": "apps/server/.eslintrc.json",
+          "hash": "13800677001662881425"
+        },
+        {
+          "file": "apps/server/jest.config.ts",
+          "hash": "4920721498772935253"
+        },
+        {
+          "file": "apps/server/project.json",
+          "hash": "1561843841767254809"
+        },
+        {
+          "file": "apps/server/src/app/app.controller.spec.ts",
+          "hash": "9499997688052526633",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/server/src/app/app.controller.ts",
+          "hash": "9005150069945785676",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/server/src/app/app.module.ts",
+          "hash": "18360819631576212280",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/cache-manager"
+          ]
+        },
+        {
+          "file": "apps/server/src/app/app.service.spec.ts",
+          "hash": "8587461140686713758",
+          "deps": [
+            "npm:@nestjs/testing"
+          ]
+        },
+        {
+          "file": "apps/server/src/app/app.service.ts",
+          "hash": "9967902337593410053",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/server/src/app/events.gateway.ts",
+          "hash": "16446371574636020264",
+          "deps": [
+            "npm:@nestjs/websockets",
+            "npm:socket.io",
+            "lib",
+            "npm:@nestjs/common",
+            "npm:@nestjs/cache-manager",
+            "npm:cache-manager",
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "apps/server/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/server/src/main.ts",
+          "hash": "3670468007669447848",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/core"
+          ]
+        },
+        {
+          "file": "apps/server/tsconfig.app.json",
+          "hash": "3171572500325445971"
+        },
+        {
+          "file": "apps/server/tsconfig.json",
+          "hash": "3490524966360018312"
+        },
+        {
+          "file": "apps/server/tsconfig.spec.json",
+          "hash": "11550347367511341917"
+        },
+        {
+          "file": "apps/server/webpack.config.js",
+          "hash": "10619490397189790225",
+          "deps": [
+            "npm:@nx/webpack"
+          ]
+        }
+      ],
+      "lib": [
+        {
+          "file": "libs/lib/.eslintrc.json",
+          "hash": "16896711999632553762"
+        },
+        {
+          "file": "libs/lib/README.md",
+          "hash": "12643788801428417843"
+        },
+        {
+          "file": "libs/lib/jest.config.ts",
+          "hash": "2434301606417721987"
+        },
+        {
+          "file": "libs/lib/package.json",
+          "hash": "4862363211070492973"
+        },
+        {
+          "file": "libs/lib/project.json",
+          "hash": "13885586332553718666"
+        },
+        {
+          "file": "libs/lib/src/index.ts",
+          "hash": "7423899517917671758"
+        },
+        {
+          "file": "libs/lib/src/lib/events.ts",
+          "hash": "6706797123272162309"
+        },
+        {
+          "file": "libs/lib/src/lib/lib.spec.ts",
+          "hash": "3984377682755806999"
+        },
+        {
+          "file": "libs/lib/src/lib/lib.ts",
+          "hash": "12122736170949257995"
+        },
+        {
+          "file": "libs/lib/src/lib/models.ts",
+          "hash": "12784129671859795603"
+        },
+        {
+          "file": "libs/lib/tsconfig.json",
+          "hash": "5840880287502376438"
+        },
+        {
+          "file": "libs/lib/tsconfig.lib.json",
+          "hash": "3632393694954060084"
+        },
+        {
+          "file": "libs/lib/tsconfig.spec.json",
+          "hash": "11550347367511341917"
+        }
+      ],
+      "server-e2e": [
+        {
+          "file": "apps/server-e2e/.eslintrc.json",
+          "hash": "8709851544463005581"
+        },
+        {
+          "file": "apps/server-e2e/jest.config.ts",
+          "hash": "14212190043399416865"
+        },
+        {
+          "file": "apps/server-e2e/project.json",
+          "hash": "5152466927891365766"
+        },
+        {
+          "file": "apps/server-e2e/src/server/server.spec.ts",
+          "hash": "110394728024017389",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/server-e2e/src/support/global-setup.ts",
+          "hash": "2568409276037275290"
+        },
+        {
+          "file": "apps/server-e2e/src/support/global-teardown.ts",
+          "hash": "5275447082211835490"
+        },
+        {
+          "file": "apps/server-e2e/src/support/test-setup.ts",
+          "hash": "10984585515912236441",
+          "deps": [
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/server-e2e/tsconfig.json",
+          "hash": "15443990093475294480"
+        },
+        {
+          "file": "apps/server-e2e/tsconfig.spec.json",
+          "hash": "14954872453723519891"
+        }
+      ]
+    }
+  }
+}

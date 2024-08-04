@@ -20,6 +20,7 @@ export class GameService {
 
   constructor(private socket: Socket) {
     this.socket.on(Events.PLAYER_JOINED, (data) => {
+      debugger;
       this.players$.next(data.players);
     });
     this.socket.on(Events.PLAYER_LEFT, (data) => {

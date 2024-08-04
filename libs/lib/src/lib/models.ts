@@ -1,16 +1,24 @@
-export interface ICreateRoomRequest {
+export interface IRoomRequest {
   playerName: string;
 }
 
-export interface IJoinRoomRequest extends ICreateRoomRequest {
+export interface IJoinRoomRequest extends IRoomRequest {
   roomCode: string;
 }
 
 export interface IRoom {
   code: string;
   players: IPlayer[];
-  turn: any;
-  settings: any;
+  turn: {
+    attempt: {
+      num: number;
+      values: IDie[] | null;
+    };
+    player: IPlayer | null;
+  };
+  settings: {
+    rollAttempts: number;
+  };
   gameStarted: boolean;
 }
 

@@ -3,10 +3,13 @@ import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
 import { EntryRowComponent } from '../entry-row/entry-row.component';
 import { BehaviorSubject } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 type Entry = { value: number; bonus?: boolean; _selectable?: boolean };
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, EntryRowComponent],
   selector: 'app-game-sheet',
   templateUrl: './game-sheet.component.html',
   styleUrls: ['./game-sheet.component.scss'],

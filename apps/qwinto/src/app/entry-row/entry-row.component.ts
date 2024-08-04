@@ -1,7 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
+import { CommonModule } from '@angular/common';
+import { EntryComponent } from '../entry/entry.component';
 @Component({
+  standalone: true,
+  imports: [CommonModule, EntryComponent],
   selector: 'app-entry-row',
   templateUrl: './entry-row.component.html',
   styleUrls: ['./entry-row.component.scss'],

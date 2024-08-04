@@ -10,7 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import {
   Events,
-  ICreateRoomRequest,
+  IRoomRequest,
   IDie,
   IJoinRoomRequest,
   IPlayer,
@@ -35,7 +35,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage(Events.CREATE_ROOM)
   async createRoom(
-    @MessageBody() data: ICreateRoomRequest,
+    @MessageBody() data: IRoomRequest,
     @ConnectedSocket() client: Socket
   ) {
     const code = await this.generateRoomCode();
@@ -54,9 +54,12 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     const player = this.generatePlayer(room.code, data.playerName, client.id);
 
+    // we set the room code to be easily identifiable by the client id
     this.cacheManager.set(`client-${client.id}`, data.roomCode, 60 * 60 * 24); // 12 hours
 
-    if (room.players.length === 0) player.isAdmin = true;
+    if (room.players.length === 0) {
+      player.isAdmin = true;
+    }
 
     room.players.push(player);
 
@@ -134,7 +137,11 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
     const room = await this.cacheManager.get<IRoom>(roomCode);
 
-    if (room?.turn.attempt >= room?.settings.rollAttempts) {
+    if (!room) {
+      return; // todo: error
+    }
+
+    if (room.turn.attempt.num >= room.settings.rollAttempts) {
       return; // todo: error
     }
 
@@ -151,10 +158,11 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     room.turn = {
-      ...room.turn,
-      attempt: room.turn.attempt + 1,
-      player: room.players.find((x) => x.socketID == client.id),
-      die: data,
+      attempt: {
+        num: room.turn.attempt.num + 1,
+        values: data,
+      },
+      player: player,
     };
 
     return data;
@@ -170,7 +178,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: any) {
-    console.warn(`Client disconnected: ${client.id}`);
+    console.warn(`Client connected: ${client.id}`);
   }
 
   private async generateRoomCode() {
@@ -195,8 +203,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         rollAttempts: 2,
       },
       turn: {
-        attempt: 0,
-        lockedIn: false,
+        attempt: {
+          num: 0,
+          values: null,
+        },
         player: null,
       },
     };
@@ -222,6 +232,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private generateGameSheet(): IPlayerSheet {
     return {
+      failed: [],
       rows: [
         {
           color: 'orangered',
