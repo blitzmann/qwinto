@@ -2,8 +2,11 @@ import { Component, Input } from '@angular/core';
 import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
 import { EntryRowComponent } from '../entry-row/entry-row.component';
-import { BehaviorSubject } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { IAppState, selectGridState } from '../store/reducers';
+import { IPlayer, IRoom } from '../../../../../libs/lib/src';
 
 type Entry = { value: number; bonus?: boolean; _selectable?: boolean };
 
@@ -17,18 +20,27 @@ type Entry = { value: number; bonus?: boolean; _selectable?: boolean };
 export class GameSheetComponent {
   public rollSum = -1;
 
-  public playerSheet;
+  data$ = combineLatest({
+    playerSheet: this.store
+      .select(selectGridState)
+      .pipe(
+        map(
+          (state: IAppState) =>
+            (<IPlayer>(
+              state.roomState.players.find(
+                (player) => player.id === state.playerID
+              )
+            ))?.sheet
+        )
+      ),
+  });
 
-  constructor(
-    private WebsocketService: WebsocketService,
-    private GameService: GameService
-  ) {
-    this.GameService.players$.subscribe((players) => {
-      debugger;
-      const me = players.find((x) => x.id === this.GameService.playerID);
-      if (!me) return; // todo: error
-      this.playerSheet = me.sheet;
-    });
+  constructor(private store: Store, private GameService: GameService) {
+    // this.GameService.players$.subscribe((players) => {
+    //   const me = players.find((x) => x.id === this.GameService.playerID);
+    //   if (!me) return; // todo: error
+    //   this.playerSheet = me.sheet;
+    // });
     // this.WebsocketService.messages.subscribe((msg) => {
     //   if (
     //     msg.action === 'rollDiceResponse' &&

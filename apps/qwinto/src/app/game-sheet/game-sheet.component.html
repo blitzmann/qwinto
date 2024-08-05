@@ -1,7 +1,9 @@
-<div *ngIf="playerSheet">
-  <app-entry-row
-    *ngFor="let row of playerSheet.rows"
-    [data]="row"
-    [style.left]="row.offset * 37 + 'px'"
-  ></app-entry-row>
-</div>
+<ng-container *ngIf="data$ | async as data">
+  <ng-container *ngIf="data.playerSheet">
+    <app-entry-row
+      *ngFor="let row of data.playerSheet.rows"
+      [data]="row"
+      [style.left]="row.offset * 37 + 'px'"
+    ></app-entry-row>
+  </ng-container>
+</ng-container>

@@ -4,7 +4,9 @@ import { WebsocketService } from './services/websocket.service';
 
 import { Socket } from 'ngx-socket-io';
 import { map } from 'rxjs/operators';
-import { Events, IPlayer, IRoom } from '../../../../libs/lib/src';
+import { ClientEvents, Events, IPlayer, IRoom } from '../../../../libs/lib/src';
+import { Store } from '@ngrx/store';
+import { gridActions } from './store/actions';
 
 @Injectable({
   providedIn: 'root',
@@ -13,18 +15,18 @@ export class GameService {
   public roomCode!: string;
   public playerID!: string;
   public rollSum!: number;
-  public gameState!: IRoom;
-  public players$ = new Subject<IPlayer[]>();
   public myTurn$ = new BehaviorSubject<boolean>(true);
   public gameStarted$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private socket: Socket) {
-    this.socket.on(Events.PLAYER_JOINED, (data) => {
-      debugger;
-      this.players$.next(data.players);
+  constructor(private socket: Socket, private store: Store) {
+    this.socket.on(ClientEvents.PLAYER_JOINED, (data) => {
+      this.store.dispatch(gridActions.player_joined(data.player));
     });
     this.socket.on(Events.PLAYER_LEFT, (data) => {
-      this.players$.next(data.players);
+      this.store.dispatch(gridActions.player_left(data.player));
+    });
+    this.socket.on(ClientEvents.GAME_LOAD, (data) => {
+      this.store.dispatch(gridActions.game_load(data));
     });
     this.socket.on(Events.START_GAME, (data) => {
       this.gameStarted$.next(true);

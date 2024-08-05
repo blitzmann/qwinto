@@ -16,10 +16,7 @@ export class EntryRowComponent {
   public rollSum = -1;
   public myTurn$ = this.GameService.myTurn$;
 
-  constructor(
-    private WebsocketService: WebsocketService,
-    private GameService: GameService
-  ) {
+  constructor(private GameService: GameService) {
     // this.WebsocketService.messages.subscribe((msg) => {
     //   if (msg.action === 'rollSetAccepted') {
     //     if (this.data.key === msg.payload.rowKey) {
@@ -31,13 +28,5 @@ export class EntryRowComponent {
 
   public setRoll(entry) {
     if (!this.GameService.myTurn$.value) return;
-
-    this.WebsocketService.messages.next({
-      action: 'rollSet',
-      payload: {
-        rowKey: this.data.key,
-        entryIdx: this.data.entries.indexOf(entry),
-      },
-    });
   }
 }

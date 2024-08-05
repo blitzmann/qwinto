@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { WebsocketService } from '../services/websocket.service';
 import { Socket } from 'ngx-socket-io';
-import { Events } from '../../../../../libs/lib/src';
+import { Events, IRoom } from '../../../../../libs/lib/src';
 import { GameService } from '../game.service';
 import { CommonModule } from '@angular/common';
+import { combineLatest, map } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { IAppState, selectGridState } from '../store/reducers';
 
 @Component({
   standalone: true,
@@ -13,9 +16,13 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./player-list.component.scss'],
 })
 export class PlayerListComponent {
-  public players = this.GameService.players$;
+  data$ = combineLatest({
+    players: this.store
+      .select(selectGridState)
+      .pipe(map((state: IAppState) => state.roomState.players)),
+  });
 
-  constructor(private socket: Socket, private GameService: GameService) {
+  constructor(private store: Store, private GameService: GameService) {
     // this.WebsocketService.messages.subscribe((msg) => {
     //   if (['playerJoined', 'playerLeft'].includes(msg.action)) {
     //     this.players = msg.payload.players;

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  NavigationStart,
+  Router,
+} from '@angular/router';
 import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
 import { Socket } from 'ngx-socket-io';
@@ -14,6 +19,8 @@ import { CommonModule } from '@angular/common';
 import { GameSheetComponent } from '../game-sheet/game-sheet.component';
 import { DieSelectionComponent } from '../die-selection/die-selection.component';
 import { PlayerListComponent } from '../player-list/player-list.component';
+import { Store } from '@ngrx/store';
+import { gridActions } from '../store/actions';
 
 @Component({
   standalone: true,
@@ -33,23 +40,20 @@ export class GameRoomComponent implements OnInit {
   public gameStarted$ = this.GameService.gameStarted$;
   public playerSheet$ = new Subject<IPlayerSheet>();
 
+  isInAppNavigation: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private GameService: GameService,
-    private socket: Socket
+    private socket: Socket,
+    private router: Router,
+    private store: Store
   ) {
-    this.GameService.players$.subscribe((players) => {
-      const me = players.find((x) => x.id === this.GameService.playerID);
-      if (!me) return;
-      this.playerSheet$.next(me?.sheet);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.isInAppNavigation = event.id !== 1;
+      }
     });
-    // this.WebsocketService.messages.subscribe((msg) => {
-    //   if (msg.action === 'gameState') {
-    //   }
-    //   if (msg.action === 'gameStarted') {
-    //     // Game started command will send whose turn it is
-    //   }
-    // });
   }
 
   ngOnInit(): void {
@@ -57,21 +61,26 @@ export class GameRoomComponent implements OnInit {
       this.roomCode = params['roomCode'];
       this.playerID = params['playerID'];
 
-      this.GameService.roomCode = this.roomCode;
-      this.GameService.playerID = this.playerID;
-
-      this.socket.emit(
-        Events.GAME_STATE,
-        {
+      this.store.dispatch(
+        // todo: rename this, or rather revisit since the whole join / reconnect should be revisited
+        gridActions.joinResponse({
           roomCode: this.roomCode,
           playerID: this.playerID,
-        },
-        (data) => {
-          debugger;
-          this.GameService.gameState = data;
-          this.GameService.players$.next(data.players);
-        }
+        })
       );
+
+      if (this.isInAppNavigation) {
+        return;
+      }
+
+      // todo: we need to have some sort of token to verify the authenticity of the player ID, otherwise we'll just have a "join" command.
+      this.socket.emit(Events.RECONNECT, {
+        roomCode: this.roomCode,
+        playerID: this.playerID,
+      });
+
+      this.GameService.roomCode = this.roomCode;
+      this.GameService.playerID = this.playerID;
     });
   }
 

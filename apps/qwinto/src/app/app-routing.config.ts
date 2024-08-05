@@ -4,7 +4,7 @@ import { GameRoomComponent } from './game-room/game-room.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: ':roomCode/:playerID',
     component: GameRoomComponent,
@@ -13,9 +13,3 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirect to /home by default
   { path: '**', redirectTo: '/home' }, // Redirect to the home route if the URL doesn't match any defined routes.
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

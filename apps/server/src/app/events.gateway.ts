@@ -16,10 +16,12 @@ import {
   IPlayer,
   IPlayerSheet,
   IRoom,
+  ClientEvents,
 } from '@lib';
 import { Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { timeout } from 'rxjs';
 const { v4: uuidv4 } = require('uuid');
 
 @WebSocketGateway({
@@ -28,10 +30,11 @@ const { v4: uuidv4 } = require('uuid');
   },
 })
 export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  @WebSocketServer()
-  server!: Server;
+  @WebSocketServer() server!: Server;
 
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
+    this.cacheManager.set('test', { test: 42 });
+  }
 
   @SubscribeMessage(Events.CREATE_ROOM)
   async createRoom(
@@ -40,7 +43,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const code = await this.generateRoomCode();
     const room = this.generateRoom(code);
-    this.cacheManager.set(code, room, 60 * 60 * 24); // 12 hours
+    this.cacheManager.set(code, room, 1000 * 60 * 60 * 24); // 12 hours
     return this.joinRoom({ ...data, roomCode: code }, client);
   }
 
@@ -62,29 +65,39 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     room.players.push(player);
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
 
-    client.join(room.code);
-    client.to(room.code).emit(Events.PLAYER_JOINED, {
+    await client.join(room.code);
+
+    // we emit via server as client.to()... does not send to the client that is calling the function
+    await client.to(room.code).emit(ClientEvents.PLAYER_JOINED, {
       player,
-      players: [...room.players.values()],
     });
+
+    await client.emit(ClientEvents.GAME_LOAD, room);
+
+    console.log('Player joined, emited, ', ClientEvents.PLAYER_JOINED);
     // todo: emit player joined to everyone besides the one who joined
     return { roomCode: room.code, playerID: player.id };
   }
 
-  @SubscribeMessage(Events.GAME_STATE)
+  @SubscribeMessage(Events.RECONNECT)
   async gameState(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+    console.log('Reconnecting player');
     const room = await this.cacheManager.get<IRoom>(data.roomCode);
 
     if (room === undefined) {
+      console.log('Room not found');
       return;
       // todo: send error
     }
-
+    console.log(room);
+    console.log(data);
     // todo: if player disconnected / refreshed, but is requesting game state from a room, determine how to switch over their socket connection
     const player = room.players.find((x) => x.id === data.playerID);
 
     if (!player) {
+      console.log('Player not found');
       return; // todo: error
     }
 
@@ -92,12 +105,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // need to re-associate the player with their socket and join the connection with this room
       player.socketID = client.id;
       client.join(room.code);
+      // todo: re-send data to other clients about new client ID and stuff (probably not nessessary, but couldn't hurt)
     }
 
-    return {
-      ...room,
-      players: [...room.players.values()],
-    };
+    await client.emit(ClientEvents.GAME_LOAD, room);
   }
 
   @SubscribeMessage(Events.START_GAME)
@@ -178,7 +189,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: any) {
-    console.warn(`Client connected: ${client.id}`);
+    console.warn(`Client disconnected: ${client.id}`);
   }
 
   private async generateRoomCode() {

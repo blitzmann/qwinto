@@ -3,8 +3,12 @@ import { GameService } from '../game.service';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { Events } from '../../../../../libs/lib/src';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -13,25 +17,9 @@ export class HomeComponent {
   public playerName!: string;
   public roomCode!: string;
 
-  constructor(
-    private GameService: GameService,
-    private router: Router,
-    private socket: Socket
-  ) {
-    // this.WebsocketService.messages.subscribe((msg) => {
-    //   if (msg.action === 'roomCode') {
-    //     // created a room
-    //     const { roomCode, playerID } = msg.payload;
-    //     this.router.navigate([roomCode, playerID]);
-    //   }
-    //   if (msg.action === 'playerJoined') {
-    //     // joined a room. The client recieves this message if they've been added tot he room, so random clients shouldn't recieve it
-    //     const { player } = msg.payload;
-    //     this.router.navigate([this.roomCode, player.id]);
-    //   }
-    // });
-    this.playerName = 'Ryan';
-    this.create();
+  constructor(private router: Router, private socket: Socket) {
+    // this.playerName = 'Ryan';
+    // this.create();
   }
 
   public create() {

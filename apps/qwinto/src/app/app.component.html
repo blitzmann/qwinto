@@ -1,1 +1,8 @@
 <router-outlet></router-outlet>
+<ng-container *ngIf="data$ | async as data">
+  <ngx-json-viewer
+    [json]="data.gameState"
+    [expanded]="false"
+    style="width: 500px; height: 300px; overflow: auto; display: block"
+  ></ngx-json-viewer>
+</ng-container>
