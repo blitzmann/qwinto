@@ -232,7 +232,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       players: [],
       gameStarted: false,
       settings: {
-        rollAttempts: 2,
+        rollAttempts: 15,
       },
       turn: {
         attempt: {

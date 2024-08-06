@@ -1,6 +1,7 @@
-<ng-container *ngIf="data$ | async as data2">
+<ng-container *ngIf="data2$ | async as data2">
   <div class="row-container" [style.background-color]="data.color">
-    <div *ngFor="let entry of data.entries">
+    <!-- {{ data2.entries | json }} -->
+    <div *ngFor="let entry of data2.entries">
       <app-entry
         *ngIf="entry"
         [bonus]="entry.bonus"

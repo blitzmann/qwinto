@@ -9,6 +9,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./entry.component.scss'],
 })
 export class EntryComponent {
-  @Input() bonus = false;
-  @Input() value = '';
+  @Input() bonus: boolean | undefined = false;
+  @Input() value: number | null = null;
 }

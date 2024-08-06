@@ -40,12 +40,13 @@ export interface IPlayerSheet {
   rows: IEntryRow[];
   failed: ({ value: number | null; bonus?: boolean } | null)[];
 }
+export type TEntry = { value: number | null; bonus?: boolean } | null;
 
 export interface IEntryRow {
   color: string;
-  key: string;
+  key: dieColors;
   offset: number;
-  entries: ({ value: number | null; bonus?: boolean } | null)[];
+  entries: TEntry[];
 }
 
 export type dieColors = 'purple' | 'yellow' | 'orange';

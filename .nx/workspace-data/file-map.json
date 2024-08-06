@@ -78,79 +78,63 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".editorconfig",
-        "hash": "6686520031028425313"
+        "file": "tsconfig.base.json",
+        "hash": "2310634406664533036"
       },
       {
-        "file": ".eslintignore",
-        "hash": "7663861978715868291"
-      },
-      {
-        "file": ".eslintrc.json",
-        "hash": "18315524891129148814"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "47369452743088645"
-      },
-      {
-        "file": ".prettierignore",
-        "hash": "8865097869854018350"
-      },
-      {
-        "file": ".prettierrc",
-        "hash": "16267754514737964994"
-      },
-      {
-        "file": ".vscode/extensions.json",
-        "hash": "18037487075392171512"
-      },
-      {
-        "file": ".vscode/launch.json",
-        "hash": "6597208061681618998"
-      },
-      {
-        "file": ".vscode/tasks.json",
-        "hash": "5336636969995539451"
-      },
-      {
-        "file": "README.md",
-        "hash": "223126244074156452"
-      },
-      {
-        "file": "jest.config.ts",
-        "hash": "12333515226966617182"
-      },
-      {
-        "file": "jest.preset.js",
-        "hash": "9430166341120122740"
-      },
-      {
-        "file": "karma.conf.js",
-        "hash": "9656364725710720620"
-      },
-      {
-        "file": "libs/.gitkeep",
+        "file": "tools/generators/.gitkeep",
         "hash": "3244421341483603138"
-      },
-      {
-        "file": "migrations.json",
-        "hash": "13241487410103834673"
-      },
-      {
-        "file": "nx.json",
-        "hash": "4878880028114851269"
       },
       {
         "file": "package-lock.json",
         "hash": "6340768953490392513"
       },
       {
-        "file": "package.json",
-        "hash": "16066091711540683746"
+        "file": "jest.preset.js",
+        "hash": "9430166341120122740"
       },
       {
-        "file": "tools/generators/.gitkeep",
+        "file": ".prettierignore",
+        "hash": "8865097869854018350"
+      },
+      {
+        "file": "migrations.json",
+        "hash": "13241487410103834673"
+      },
+      {
+        "file": ".eslintignore",
+        "hash": "7663861978715868291"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "18037487075392171512"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "47369452743088645"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "12333515226966617182"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "6597208061681618998"
+      },
+      {
+        "file": "karma.conf.js",
+        "hash": "9656364725710720620"
+      },
+      {
+        "file": "nx.json",
+        "hash": "4878880028114851269"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "5336636969995539451"
+      },
+      {
+        "file": "libs/.gitkeep",
         "hash": "3244421341483603138"
       },
       {
@@ -158,8 +142,24 @@
         "hash": "16088922570277978783"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "2310634406664533036"
+        "file": "package.json",
+        "hash": "16066091711540683746"
+      },
+      {
+        "file": "README.md",
+        "hash": "223126244074156452"
+      },
+      {
+        "file": ".editorconfig",
+        "hash": "6686520031028425313"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "18315524891129148814"
       }
     ],
     "projectFileMap": {
@@ -215,7 +215,7 @@
         },
         {
           "file": "apps/server/src/app/events.gateway.ts",
-          "hash": "18328013338102027494",
+          "hash": "13984960252972928104",
           "deps": [
             "npm:@nestjs/websockets",
             "npm:socket.io",
@@ -274,7 +274,7 @@
         },
         {
           "file": "apps/qwinto/src/app/app.component.html",
-          "hash": "16539913415584783752"
+          "hash": "15263044630426102313"
         },
         {
           "file": "apps/qwinto/src/app/app.component.scss",
@@ -354,7 +354,7 @@
         },
         {
           "file": "apps/qwinto/src/app/entry-row/entry-row.component.html",
-          "hash": "12148480629384438838"
+          "hash": "4301630071525086895"
         },
         {
           "file": "apps/qwinto/src/app/entry-row/entry-row.component.scss",
@@ -369,12 +369,13 @@
         },
         {
           "file": "apps/qwinto/src/app/entry-row/entry-row.component.ts",
-          "hash": "10204147865878604447",
+          "hash": "3610685910847642285",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
             "npm:rxjs",
-            "npm:@ngrx/store"
+            "npm:@ngrx/store",
+            "lib"
           ]
         },
         {
@@ -394,7 +395,7 @@
         },
         {
           "file": "apps/qwinto/src/app/entry/entry.component.ts",
-          "hash": "8800643799122988028",
+          "hash": "5512098862074732033",
           "deps": [
             "npm:@angular/common",
             "npm:@angular/core"
@@ -445,7 +446,7 @@
         },
         {
           "file": "apps/qwinto/src/app/game-sheet/game-sheet.component.ts",
-          "hash": "5151990468186363171",
+          "hash": "9737707367075335126",
           "deps": [
             "npm:@angular/core",
             "npm:rxjs",
@@ -675,7 +676,7 @@
         },
         {
           "file": "libs/lib/src/lib/models.ts",
-          "hash": "2194095442718972810"
+          "hash": "17770203549829419531"
         },
         {
           "file": "libs/lib/tsconfig.json",
