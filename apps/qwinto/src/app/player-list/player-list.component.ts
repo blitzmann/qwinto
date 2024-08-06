@@ -6,7 +6,12 @@ import { GameService } from '../game.service';
 import { CommonModule } from '@angular/common';
 import { combineLatest, map } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { IAppState, selectGridState } from '../store/reducers';
+import {
+  IAppState,
+  selectCurrentTurn,
+  selectGridState,
+  selectIsAdmin,
+} from '../store/reducers';
 
 @Component({
   standalone: true,
@@ -20,6 +25,8 @@ export class PlayerListComponent {
     players: this.store
       .select(selectGridState)
       .pipe(map((state: IAppState) => state.roomState.players)),
+    currentTurn: this.store.select(selectCurrentTurn),
+    isAdmin: this.store.select(selectIsAdmin),
   });
 
   constructor(private store: Store, private GameService: GameService) {

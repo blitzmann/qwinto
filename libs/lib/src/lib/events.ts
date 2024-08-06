@@ -18,4 +18,6 @@ export enum ClientEvents {
    * When joining a game, you need the whole state. This provideds it. Others will recieve the PLAYER_JOINED event
    */
   GAME_LOAD = 'game_load',
+
+  PLAYER_ROLL = 'player_roll',
 }

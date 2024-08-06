@@ -1,6 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { ClientEvents } from '../../../../../libs/lib/src/lib/events';
-import { IPlayer, IRoom } from '../../../../../libs/lib/src';
+import { ClientEvents, Events } from '../../../../../libs/lib/src/lib/events';
+import { IAttempt, IPlayer, IRoom, ITurn } from '../../../../../libs/lib/src';
 
 export const gridActions = createActionGroup({
   source: 'grid',
@@ -9,6 +9,8 @@ export const gridActions = createActionGroup({
     [ClientEvents.PLAYER_JOINED]: props<IPlayer>(),
     [ClientEvents.PLAYER_LEFT]: props<{ player: IPlayer }>(),
     [ClientEvents.GAME_LOAD]: props<IRoom>(),
+    [Events.START_GAME]: props<ITurn>(),
+    [ClientEvents.PLAYER_ROLL]: props<IAttempt>(),
     'Join Response': props<{ playerID: string; roomCode: string }>(),
   },
 });

@@ -14,13 +14,18 @@ import {
   IPlayerSheet,
   IRoom,
 } from '../../../../../libs/lib/src';
-import { Subject } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { GameSheetComponent } from '../game-sheet/game-sheet.component';
 import { DieSelectionComponent } from '../die-selection/die-selection.component';
 import { PlayerListComponent } from '../player-list/player-list.component';
 import { Store } from '@ngrx/store';
 import { gridActions } from '../store/actions';
+import {
+  selectGridState,
+  selectIsAdmin,
+  selectRoomState,
+} from '../store/reducers';
 
 @Component({
   standalone: true,
@@ -37,10 +42,14 @@ import { gridActions } from '../store/actions';
 export class GameRoomComponent implements OnInit {
   public roomCode!: string;
   public playerID!: string;
-  public gameStarted$ = this.GameService.gameStarted$;
   public playerSheet$ = new Subject<IPlayerSheet>();
 
   isInAppNavigation: boolean = false;
+
+  data$ = combineLatest({
+    isAdmin: this.store.select(selectIsAdmin),
+    roomState: this.store.select(selectRoomState),
+  });
 
   constructor(
     private route: ActivatedRoute,
@@ -86,7 +95,7 @@ export class GameRoomComponent implements OnInit {
 
   public startGame() {
     this.socket.emit(Events.START_GAME, {
-      roomCode: this.GameService.roomCode,
+      roomCode: this.roomCode,
     });
   }
 }

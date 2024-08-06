@@ -1,9 +1,14 @@
-<button (click)="startGame()" *ngIf="!(gameStarted$ | async)">
-  Start Game
-</button>
-<div class="room-code">Room Code: {{ roomCode }}</div>
-<app-player-list></app-player-list>
+<ng-container *ngIf="data$ | async as data">
+  <button
+    (click)="startGame()"
+    *ngIf="!data.roomState.gameStarted && data.isAdmin"
+  >
+    Start Game
+  </button>
+  <div class="room-code">Room Code: {{ roomCode }}</div>
+  <app-player-list></app-player-list>
 
-<app-game-sheet></app-game-sheet>
+  <app-game-sheet></app-game-sheet>
 
-<app-die-selection></app-die-selection>
+  <app-die-selection></app-die-selection>
+</ng-container>

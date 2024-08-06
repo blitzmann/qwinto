@@ -4,7 +4,13 @@ import { WebsocketService } from './services/websocket.service';
 
 import { Socket } from 'ngx-socket-io';
 import { map } from 'rxjs/operators';
-import { ClientEvents, Events, IPlayer, IRoom } from '../../../../libs/lib/src';
+import {
+  ClientEvents,
+  Events,
+  IPlayer,
+  IRoom,
+  ITurn,
+} from '../../../../libs/lib/src';
 import { Store } from '@ngrx/store';
 import { gridActions } from './store/actions';
 
@@ -15,8 +21,6 @@ export class GameService {
   public roomCode!: string;
   public playerID!: string;
   public rollSum!: number;
-  public myTurn$ = new BehaviorSubject<boolean>(true);
-  public gameStarted$ = new BehaviorSubject<boolean>(false);
 
   constructor(private socket: Socket, private store: Store) {
     this.socket.on(ClientEvents.PLAYER_JOINED, (data) => {
@@ -28,8 +32,13 @@ export class GameService {
     this.socket.on(ClientEvents.GAME_LOAD, (data) => {
       this.store.dispatch(gridActions.game_load(data));
     });
-    this.socket.on(Events.START_GAME, (data) => {
-      this.gameStarted$.next(true);
+    this.socket.on(Events.START_GAME, (data: ITurn) => {
+      debugger;
+      this.store.dispatch(gridActions.start_game(data));
+    });
+    this.socket.on(ClientEvents.PLAYER_ROLL, (data) => {
+      debugger;
+      this.store.dispatch(gridActions.player_roll(data));
     });
   }
 

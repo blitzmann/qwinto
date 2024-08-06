@@ -2,8 +2,15 @@
   <h2>Player List</h2>
   <ng-container *ngIf="data$ | async as data">
     <ul>
-      <li *ngFor="let player of data.players">
+      <li
+        *ngFor="let player of data.players"
+        [ngStyle]="{
+          'font-weight':
+            player.id === data.currentTurn.player?.id ? 'bold' : 'normal'
+        }"
+      >
         {{ player.name }}
+        <span *ngIf="player.isAdmin">⭐</span>
       </li>
     </ul>
   </ng-container>

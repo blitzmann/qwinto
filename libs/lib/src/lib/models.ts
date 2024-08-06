@@ -5,17 +5,20 @@ export interface IRoomRequest {
 export interface IJoinRoomRequest extends IRoomRequest {
   roomCode: string;
 }
+export interface IAttempt {
+  num: number;
+  values: IDie[] | null;
+}
+
+export interface ITurn {
+  attempt: IAttempt;
+  player: IPlayer | null;
+}
 
 export interface IRoom {
   code: string;
   players: IPlayer[];
-  turn: {
-    attempt: {
-      num: number;
-      values: IDie[] | null;
-    };
-    player: IPlayer | null;
-  };
+  turn: ITurn;
   settings: {
     rollAttempts: number;
   };

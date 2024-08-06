@@ -1,12 +1,23 @@
-<div class="dice-container">
-  <app-die
-    *ngFor="let die of dice"
-    [class.selected]="die.selected"
-    [value]="die.value"
-    [color]="die.color"
-    (click)="selectDie(die)"
-  ></app-die>
-</div>
-<button (click)="rollSelected()" [disabled]="!(myTurn$ | async)">Roll</button>
-
-My Turn: {{ myTurn$ | async }}
+<ng-container *ngIf="data$ | async as data">
+  <div class="dice-container">
+    <app-die
+      *ngFor="let die of dice"
+      [class.selected]="die.selected"
+      [value]="die.value"
+      [color]="die.color"
+      (click)="selectDie(die)"
+    ></app-die>
+  </div>
+  <div *ngIf="data.myTurn">
+    <button
+      (click)="rollSelected()"
+      *ngIf="data.currentTurn.attempt.num < data.gameSettings.rollAttempts"
+    >
+      Roll
+    </button>
+    <span>{{ data.currentRollValue | json }}</span>
+  </div>
+  <div *ngIf="!data.myTurn">
+    Current Turn: {{ data.currentTurn?.player?.name }} / {{ $myTurn() }}
+  </div>
+</ng-container>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { interval } from 'rxjs';
+import { combineLatest, interval } from 'rxjs';
 import { WebsocketService } from '../services/websocket.service';
 import { GameService } from '../game.service';
 import { Socket } from 'ngx-socket-io';
@@ -7,6 +7,13 @@ import { Events, IDie } from '../../../../../libs/lib/src';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DieComponent } from '../die/die.component';
+import { Store } from '@ngrx/store';
+import {
+  selectCurrentRollValue,
+  selectCurrentTurn,
+  selectGameSettings,
+  selectMyTurn,
+} from '../store/reducers';
 
 @Component({
   standalone: true,
@@ -22,9 +29,17 @@ export class DieSelectionComponent {
     { color: 'purple', value: 1, selected: false },
   ];
 
+  data$ = combineLatest({
+    myTurn: this.store.select(selectMyTurn),
+    currentTurn: this.store.select(selectCurrentTurn),
+    currentRollValue: this.store.select(selectCurrentRollValue),
+    gameSettings: this.store.select(selectGameSettings),
+  });
+
+  public $myTurn = this.store.selectSignal(selectMyTurn);
+
   private intervalID;
-  public myTurn$ = this.GameService.myTurn$;
-  constructor(private GameService: GameService, private socket: Socket) {
+  constructor(private socket: Socket, private store: Store) {
     // this.WebsocketService.messages.subscribe((msg) => {
     //   if (msg.action === 'rollDiceResponse') {
     //     clearInterval(this.intervalID);
@@ -69,12 +84,6 @@ export class DieSelectionComponent {
           }
         }
       });
-
-      // this.GameService.rollAttempt(selectedDice);
-      // this.WebsocketService.messages.next({
-      //   action: 'roll_attempt',
-      //   payload: { dice: selectedDice },
-      // });
     }, 750);
   }
 

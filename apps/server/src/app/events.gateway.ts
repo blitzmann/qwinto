@@ -52,6 +52,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: IJoinRoomRequest,
     @ConnectedSocket() client: Socket
   ) {
+    // todo: do not allow join if game has started
     const room = await this.cacheManager.get<IRoom>(data.roomCode);
     if (!room) return;
 
@@ -105,6 +106,9 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // need to re-associate the player with their socket and join the connection with this room
       player.socketID = client.id;
       client.join(room.code);
+      this.cacheManager.set(`client-${client.id}`, data.roomCode, 60 * 60 * 24); // 12 hours
+      //set room
+      this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
       // todo: re-send data to other clients about new client ID and stuff (probably not nessessary, but couldn't hurt)
     }
 
@@ -116,24 +120,42 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { roomCode: string },
     @ConnectedSocket() client: Socket
   ) {
+    // todo: prevent start with player count < 2
     if (!client.rooms.has(data.roomCode)) {
       // client is not part of this room... ignore / error
+      console.log('Client not part of room');
       return;
     }
     const room = await this.cacheManager.get<IRoom>(data.roomCode);
     if (!room) {
+      console.log('Room not found');
       return; // todo: error
+    }
+
+    if (room.gameStarted) {
+      console.log('Game already started');
+      // return; // todo: error
     }
     const player = room.players.find((x) => x.socketID == client.id);
     if (!player) {
+      console.log('Player not found');
       return;
     }
     if (!player.isAdmin) {
+      console.log('Player is not admin');
       return; // error
     }
 
+    console.log('Game starting save logic, ', room.code);
+    room.gameStarted = true;
+
+    // set first player
+    room.turn.player = room.players[0];
+
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
+
     // everything checks out, send out the start game event to everyone connected to the room
-    this.server.to(data.roomCode).emit(Events.START_GAME, room.turn);
+    this.server.to(room.code).emit(Events.START_GAME, room.turn);
   }
 
   @SubscribeMessage(Events.ROLL_ATTEMPT)
@@ -156,9 +178,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return; // todo: error
     }
 
-    // generate random values
-    data.forEach((die) => (die.value = Math.floor(Math.random() * 6) + 1));
-
     if (!room) {
       return; // todo: error
     }
@@ -168,15 +187,17 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return; // todo: error
     }
 
-    room.turn = {
-      attempt: {
-        num: room.turn.attempt.num + 1,
-        values: data,
-      },
-      player: player,
-    };
+    // generate random values
+    data.forEach((die) => (die.value = Math.floor(Math.random() * 6) + 1));
 
-    return data;
+    room.turn.attempt = {
+      num: room.turn.attempt.num + 1,
+      values: data,
+    };
+    // save room
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
+
+    this.server.to(room.code).emit(ClientEvents.PLAYER_ROLL, room.turn.attempt);
   }
 
   @SubscribeMessage('identity')

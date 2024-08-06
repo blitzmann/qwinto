@@ -1,14 +1,16 @@
-<div class="row-container" [style.background-color]="data.color">
-  <div *ngFor="let entry of data.entries">
-    <app-entry
-      *ngIf="entry"
-      [bonus]="entry.bonus"
-      [value]="entry.value"
-      (click)="entry._selectable && setRoll(entry)"
-      [class.selectable]="(myTurn$ | async) && entry._selectable"
-    ></app-entry>
+<ng-container *ngIf="data$ | async as data2">
+  <div class="row-container" [style.background-color]="data.color">
+    <div *ngFor="let entry of data.entries">
+      <app-entry
+        *ngIf="entry"
+        [bonus]="entry.bonus"
+        [value]="entry.value"
+        (click)="entry._selectable && setRoll(entry)"
+        [class.selectable]="data2.myTurn && entry._selectable"
+      ></app-entry>
 
-    <!-- If there is no entry, just add a blank element. This is needed for some weird positioning quirk -->
-    <span *ngIf="!entry"></span>
+      <!-- If there is no entry, just add a blank element. This is needed for some weird positioning quirk -->
+      <span *ngIf="!entry"></span>
+    </div>
   </div>
-</div>
+</ng-container>
