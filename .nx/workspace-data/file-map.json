@@ -78,72 +78,72 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "tsconfig.base.json",
-        "hash": "2310634406664533036"
-      },
-      {
-        "file": "tools/generators/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "6340768953490392513"
-      },
-      {
-        "file": "jest.preset.js",
-        "hash": "9430166341120122740"
-      },
-      {
         "file": ".prettierignore",
         "hash": "8865097869854018350"
-      },
-      {
-        "file": "migrations.json",
-        "hash": "13241487410103834673"
-      },
-      {
-        "file": ".eslintignore",
-        "hash": "7663861978715868291"
-      },
-      {
-        "file": ".vscode/extensions.json",
-        "hash": "18037487075392171512"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "47369452743088645"
-      },
-      {
-        "file": "jest.config.ts",
-        "hash": "12333515226966617182"
-      },
-      {
-        "file": ".vscode/launch.json",
-        "hash": "6597208061681618998"
-      },
-      {
-        "file": "karma.conf.js",
-        "hash": "9656364725710720620"
-      },
-      {
-        "file": "nx.json",
-        "hash": "4878880028114851269"
-      },
-      {
-        "file": ".vscode/tasks.json",
-        "hash": "5336636969995539451"
-      },
-      {
-        "file": "libs/.gitkeep",
-        "hash": "3244421341483603138"
       },
       {
         "file": "tools/tsconfig.tools.json",
         "hash": "16088922570277978783"
       },
       {
+        "file": ".gitignore",
+        "hash": "47369452743088645"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "6340768953490392513"
+      },
+      {
+        "file": "migrations.json",
+        "hash": "13241487410103834673"
+      },
+      {
+        "file": "jest.config.ts",
+        "hash": "12333515226966617182"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "5336636969995539451"
+      },
+      {
+        "file": "nx.json",
+        "hash": "4878880028114851269"
+      },
+      {
+        "file": "jest.preset.js",
+        "hash": "9430166341120122740"
+      },
+      {
+        "file": "libs/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "2310634406664533036"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "18037487075392171512"
+      },
+      {
+        "file": "tools/generators/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": ".eslintignore",
+        "hash": "7663861978715868291"
+      },
+      {
         "file": "package.json",
         "hash": "16066091711540683746"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "6597208061681618998"
       },
       {
         "file": "README.md",
@@ -154,12 +154,12 @@
         "hash": "6686520031028425313"
       },
       {
-        "file": ".prettierrc",
-        "hash": "16267754514737964994"
-      },
-      {
         "file": ".eslintrc.json",
         "hash": "18315524891129148814"
+      },
+      {
+        "file": "karma.conf.js",
+        "hash": "9656364725710720620"
       }
     ],
     "projectFileMap": {
@@ -215,7 +215,7 @@
         },
         {
           "file": "apps/server/src/app/events.gateway.ts",
-          "hash": "13984960252972928104",
+          "hash": "2658842025418844963",
           "deps": [
             "npm:@nestjs/websockets",
             "npm:socket.io",
@@ -354,7 +354,7 @@
         },
         {
           "file": "apps/qwinto/src/app/entry-row/entry-row.component.html",
-          "hash": "4301630071525086895"
+          "hash": "717010873141529889"
         },
         {
           "file": "apps/qwinto/src/app/entry-row/entry-row.component.scss",
@@ -369,13 +369,14 @@
         },
         {
           "file": "apps/qwinto/src/app/entry-row/entry-row.component.ts",
-          "hash": "3610685910847642285",
+          "hash": "3019786793518322698",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
             "npm:rxjs",
             "npm:@ngrx/store",
-            "lib"
+            "lib",
+            "npm:ngx-socket-io"
           ]
         },
         {
@@ -464,7 +465,7 @@
         },
         {
           "file": "apps/qwinto/src/app/game.service.ts",
-          "hash": "15624361251265070218",
+          "hash": "6360896456880766065",
           "deps": [
             "npm:@angular/core",
             "npm:rxjs",
@@ -537,7 +538,7 @@
         },
         {
           "file": "apps/qwinto/src/app/store/actions.ts",
-          "hash": "15792602212629961342",
+          "hash": "17920846695654171347",
           "deps": [
             "npm:@ngrx/store",
             "lib"
@@ -549,7 +550,7 @@
         },
         {
           "file": "apps/qwinto/src/app/store/reducers.ts",
-          "hash": "12221586137697566390",
+          "hash": "9965268214727390051",
           "deps": [
             "npm:@ngrx/store",
             "lib"
@@ -660,11 +661,11 @@
         },
         {
           "file": "libs/lib/src/index.ts",
-          "hash": "7423899517917671758"
+          "hash": "12083626469464958464"
         },
         {
           "file": "libs/lib/src/lib/events.ts",
-          "hash": "6959710246456199556"
+          "hash": "13958015863212608465"
         },
         {
           "file": "libs/lib/src/lib/lib.spec.ts",
@@ -676,7 +677,7 @@
         },
         {
           "file": "libs/lib/src/lib/models.ts",
-          "hash": "17770203549829419531"
+          "hash": "8290735234936200846"
         },
         {
           "file": "libs/lib/tsconfig.json",
@@ -689,6 +690,10 @@
         {
           "file": "libs/lib/tsconfig.spec.json",
           "hash": "11550347367511341917"
+        },
+        {
+          "file": "libs/lib/src/lib/global_util.ts",
+          "hash": "5183291026041243756"
         }
       ]
     }

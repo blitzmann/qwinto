@@ -61,6 +61,24 @@ const gridFeature = createFeature({
           turn: { ...state.roomState.turn, attempt },
         },
       };
+    }),
+    on(gridActions.next_turn, (state, data) => {
+      debugger;
+      const players = [...state.roomState.players];
+      // replace the player object in `players` with the new one from data
+      const playerIndex = players.findIndex(
+        (x) => x.id === data.previousPlayer.id
+      );
+      players[playerIndex] = data.previousPlayer;
+
+      return {
+        ...state,
+        roomState: {
+          ...state.roomState,
+          turn: data.turn, // sets the new player as well as resets attempts
+          players, // includes new info about the previous player's sheet
+        },
+      };
     })
   ),
 });

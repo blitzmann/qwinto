@@ -8,6 +8,7 @@ export enum Events {
   PLAYER_LEFT = 'player_left',
 
   ROLL_ATTEMPT = 'roll_attempt',
+  SET_ROLL = 'set_roll',
 }
 
 export enum ClientEvents {
@@ -20,4 +21,5 @@ export enum ClientEvents {
   GAME_LOAD = 'game_load',
 
   PLAYER_ROLL = 'player_roll',
+  NEXT_TURN = 'next_turn',
 }

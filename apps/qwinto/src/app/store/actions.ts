@@ -11,6 +11,7 @@ export const gridActions = createActionGroup({
     [ClientEvents.GAME_LOAD]: props<IRoom>(),
     [Events.START_GAME]: props<ITurn>(),
     [ClientEvents.PLAYER_ROLL]: props<IAttempt>(),
+    [ClientEvents.NEXT_TURN]: props<{ turn: ITurn; previousPlayer: IPlayer }>(),
     'Join Response': props<{ playerID: string; roomCode: string }>(),
   },
 });

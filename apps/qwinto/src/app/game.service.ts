@@ -40,6 +40,10 @@ export class GameService {
       debugger;
       this.store.dispatch(gridActions.player_roll(data));
     });
+    this.socket.on(ClientEvents.NEXT_TURN, (data) => {
+      debugger;
+      this.store.dispatch(gridActions.next_turn(data));
+    });
   }
 
   sendMessage(message, payload) {

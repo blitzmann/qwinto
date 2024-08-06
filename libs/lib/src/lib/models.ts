@@ -41,6 +41,7 @@ export interface IPlayerSheet {
   failed: ({ value: number | null; bonus?: boolean } | null)[];
 }
 export type TEntry = { value: number | null; bonus?: boolean } | null;
+export type TEditableEntry = (TEntry & { _selectable: boolean }) | null;
 
 export interface IEntryRow {
   color: string;

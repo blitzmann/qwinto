@@ -17,6 +17,8 @@ import {
   IPlayerSheet,
   IRoom,
   ClientEvents,
+  calculateSelectableEntries,
+  TEntry,
 } from '@lib';
 import { Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -198,6 +200,75 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
 
     this.server.to(room.code).emit(ClientEvents.PLAYER_ROLL, room.turn.attempt);
+  }
+
+  @SubscribeMessage(Events.SET_ROLL)
+  async setRoll(
+    @MessageBody() data: { rowKey: string; entryIdx: number },
+    @ConnectedSocket() client: Socket
+  ) {
+    // ensure that turn can be attempted.
+    const roomCode = await this.cacheManager.get<string>(`client-${client.id}`);
+    if (!roomCode) {
+      return; // todo: error
+    }
+    const room = await this.cacheManager.get<IRoom>(roomCode);
+
+    if (!room) {
+      return; // todo: error
+    }
+
+    const player = room.players.find((x) => x.socketID == client.id);
+    if (!player) {
+      return; // todo: error
+    }
+
+    if (room.turn.player?.id !== player.id) {
+      return; // todo: error
+    }
+
+    const matrix = calculateSelectableEntries(room.turn.attempt, player.sheet);
+
+    if (
+      !matrix.find((x) => x.key === data.rowKey)?.entries[data.entryIdx]
+        ?._selectable
+    ) {
+      console.log('Entry not selectable');
+      return;
+    }
+    const entry = player.sheet.rows.find((x) => x.key === data.rowKey)?.entries[
+      data.entryIdx
+    ];
+    if (!entry) {
+      console.log('Entry not found');
+      return;
+    }
+    entry.value = room.turn.attempt.values
+      ?.map((x) => x.value)
+      .reduce((acc, x) => acc + x, 0) as number;
+
+    // set a new player for the next turn
+    const currentPlayerIndex = room.players.findIndex(
+      (x) => x.id === player.id
+    );
+    const nextPlayerIndex = currentPlayerIndex + 1;
+    room.turn = {
+      player: room.players[nextPlayerIndex % room.players.length],
+      attempt: {
+        num: 0,
+        values: null,
+      },
+    };
+
+    // save room
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
+
+    this.server
+      .to(room.code)
+      .emit(ClientEvents.NEXT_TURN, {
+        turn: room.turn,
+        previousPlayer: player,
+      });
   }
 
   @SubscribeMessage('identity')
