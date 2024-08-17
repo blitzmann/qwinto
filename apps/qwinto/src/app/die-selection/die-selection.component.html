@@ -8,10 +8,11 @@
       [class.selected]="die.selected"
       [value]="die.value"
       [color]="die.color"
-      [class]="{ selectable: $myTurn() }"
-      (click)="$myTurn() && selectDie(die)"
+      [class]="{ selectable: data.canSelect }"
+      (click)="data.canSelect && selectDie(die)"
     ></app-die>
   </div>
+  <span>{{ data.currentRollValue | json }}</span>
   <div *ngIf="data.myTurn">
     <button
       (click)="rollSelected()"
@@ -19,7 +20,6 @@
     >
       Roll
     </button>
-    <span>{{ data.currentRollValue | json }}</span>
     <button (click)="acceptRoll()" *ngIf="!data.currentTurn.finalized">
       Accept
     </button>

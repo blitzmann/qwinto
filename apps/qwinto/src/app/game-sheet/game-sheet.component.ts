@@ -7,12 +7,13 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { IAppState, selectGridState } from '../store/reducers';
 import { IPlayer, IRoom } from '../../../../../libs/lib/src';
+import { FailedRowComponent } from '../failed-row/failed-row.component';
 
 type Entry = { value: number; bonus?: boolean; _selectable?: boolean };
 
 @Component({
   standalone: true,
-  imports: [CommonModule, EntryRowComponent],
+  imports: [CommonModule, EntryRowComponent, FailedRowComponent],
   selector: 'app-game-sheet',
   templateUrl: './game-sheet.component.html',
   styleUrls: ['./game-sheet.component.scss'],

@@ -19,12 +19,14 @@ export const gridActions = createActionGroup({
     [ClientEvents.NEXT_TURN]: props<{ turn: ITurn; previousPlayer: IPlayer }>(),
     [ClientEvents.ROLL_FINALIZED]: emptyProps(),
     [ClientEvents.PLAYER_SET_ENTRY]: props<IPlayer>(),
-    [Events.ROLL_ATTEMPT]: props<{ selected: Array<IDie> }>(),
-    'update dice values': props<any>(),
+    [Events.ROLL_ATTEMPT]: emptyProps(),
+    'update dice values': props<{ selected: IDie[]; final?: boolean }>(),
 
     [Events.RECIEVE_DIE_SELECTED]: props<Pick<IDie, 'color' | 'selected'>>(),
     [ClientEvents.DICE_SELECTED]: props<Pick<IDie, 'color' | 'selected'>>(),
     'Join Response': props<{ playerID: string; roomCode: string }>(),
+
+    'simulate roll': props<{ remoteStarted: boolean; attempt?: IAttempt }>(),
 
     noop: emptyProps(),
   },

@@ -39,7 +39,23 @@
     }
   }
 
-  &:not(.bonus) {
+  &.failed {
+    background: #00000044;
+    box-sizing: border-box;
+    border-radius: 7px;
+
+    & > div {
+      background-color: #ffffffbb;
+      position: absolute;
+      top: 2px; /* equal to border thickness */
+      left: 2px; /* equal to border thickness */
+      width: calc(100% - 4px); /* container height - (border thickness * 2) */
+      height: calc(100% - 4px); /* container height - (border thickness * 2) */
+      border-radius: 5px;
+    }
+  }
+
+  &:not(.bonus, .failed) {
     border-radius: 50%;
     background-color: #00000044;
 

@@ -24,6 +24,7 @@ export interface IRoom {
   turn: ITurn;
   settings: {
     rollAttempts: number;
+    simulation: { interval: number; minWait: number };
   };
   gameStarted: boolean;
 }
@@ -42,7 +43,7 @@ export interface IPlayer {
 
 export interface IPlayerSheet {
   rows: IEntryRow[];
-  failed: ({ value: number | null; bonus?: boolean } | null)[];
+  failed: TEntry[];
 }
 export type TEntry = { value: number | null; bonus?: boolean } | null;
 export type TEditableEntry = (TEntry & { _selectable: boolean }) | null;

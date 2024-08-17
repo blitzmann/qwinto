@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -12,4 +12,5 @@ export class EntryComponent {
   @Input() bonus: boolean | undefined = false;
   @Input() enabled: boolean | undefined = false;
   @Input() value: number | null = null;
+  @Input() failed: boolean = false;
 }

@@ -18,7 +18,7 @@ const initialState: IAppState = {
   roomCode: null,
   roomState: {
     code: '',
-    settings: { rollAttempts: 0 },
+    settings: { rollAttempts: 0, simulation: { interval: 0, minWait: 0 } },
     players: [],
     gameStarted: false,
     turn: {
@@ -127,6 +127,22 @@ const gridFeature = createFeature({
             diceState: state.roomState.turn.diceState.map((x) =>
               x.color === die.color ? { ...x, selected: die.selected } : x
             ),
+          },
+        },
+      };
+    }),
+    on(gridActions.updateDiceValues, (state, dice) => {
+      console.log('-> Update Dice Values', dice);
+      return {
+        ...state,
+        roomState: {
+          ...state.roomState,
+          turn: {
+            ...state.roomState.turn,
+            diceState: state.roomState.turn.diceState.map((x) => {
+              const die = dice.selected.find((d) => d.color === x.color);
+              return die ? die : x;
+            }),
           },
         },
       };

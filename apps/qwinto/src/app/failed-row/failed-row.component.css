@@ -1,0 +1,31 @@
+div.row-container {
+  display: flex;
+  justify-content: center;
+
+  & > div {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    flex-direction: row;
+    padding: 3px;
+
+    & > * {
+      flex-grow: 1;
+    }
+    & > span {
+      display: inline;
+    }
+
+    &:last-child {
+      border: none;
+    }
+  }
+}
+
+:host {
+  position: relative;
+}
+
+app-entry.selectable {
+  cursor: pointer;
+}

@@ -1,0 +1,14 @@
+<ng-container *ngIf="data$ | async as data">
+  <div class="row-container">
+    <div *ngFor="let entry of data.player.sheet.failed; let i = index">
+      <app-entry
+        *ngIf="entry"
+        [bonus]="false"
+        [failed]="true"
+        [value]="entry.value"
+        [enabled]="true"
+      ></app-entry>
+    </div>
+  </div>
+</ng-container>
+<hr />

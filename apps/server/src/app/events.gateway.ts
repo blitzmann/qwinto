@@ -191,12 +191,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     // check to see if this is the first attempt, in which case we will use the dice the player provides. Otherwise, we will reuse the previous dice
     // This will prevent the player from sending in different dice colors than first attempt
-    let dice: IDie[];
-    if (room.turn.attempt.num === 0) {
-      dice = data;
-    } else {
-      dice = room.turn.attempt.values as IDie[];
-    }
+    const dice = room.turn.diceState.filter((x) => x.selected);
+    console.log('Roll attempt', room.turn);
 
     // generate random values
     dice.forEach((die) => (die.value = Math.floor(Math.random() * 6) + 1));
@@ -213,7 +209,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
     // save room
     this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
-
+    console.log('Emitting player roll', room.turn.attempt);
     this.server.to(room.code).emit(ClientEvents.PLAYER_ROLL, room.turn.attempt);
   }
 
@@ -270,6 +266,10 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (room.turn.player?.id !== player.id) {
       return; // todo: error
+    }
+
+    if (room.turn.attempt.num !== 0) {
+      return; // todo: error (cannot change die selection after first attempt)
     }
 
     const die = room.turn.diceState.find((x) => x.color === data.color) as IDie;
@@ -399,6 +399,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       gameStarted: false,
       settings: {
         rollAttempts: 20,
+        simulation: { interval: 100, minWait: 1500 },
       },
       turn: {
         finalized: false,
@@ -437,7 +438,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private generateGameSheet(): IPlayerSheet {
     return {
-      failed: [],
+      failed: [
+        { value: null },
+        { value: null },
+        { value: null },
+        { value: null },
+        { value: null },
+      ],
       rows: [
         {
           color: 'orangered',
