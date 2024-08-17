@@ -8,6 +8,7 @@ import { createSelector, Store } from '@ngrx/store';
 import {
   selectCurrentRollValue,
   selectCurrentTurn,
+  selectMyPlayer,
   selectMyTurn,
   selectPlayerID,
   selectRoomState,
@@ -57,6 +58,8 @@ export class EntryRowComponent {
   data2$ = combineLatest({
     myTurn: this.store.select(selectMyTurn),
     entries: this.store.select(this.selectRowWithSelectable),
+    currentTurn: this.store.select(selectCurrentTurn),
+    myPlayer: this.store.select(selectMyPlayer),
   });
 
   constructor(private store: Store, private socket: Socket) {}

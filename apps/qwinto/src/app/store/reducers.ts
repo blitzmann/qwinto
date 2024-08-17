@@ -1,5 +1,10 @@
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
-import { ClientEvents, IPlayer, IRoom } from '../../../../../libs/lib/src';
+import {
+  ClientEvents,
+  IDie,
+  IPlayer,
+  IRoom,
+} from '../../../../../libs/lib/src';
 import { gridActions } from './actions';
 
 export interface IAppState {
@@ -17,11 +22,17 @@ const initialState: IAppState = {
     players: [],
     gameStarted: false,
     turn: {
+      finalized: false,
       player: null,
       attempt: {
         num: 0,
         values: null,
       },
+      diceState: [
+        { color: 'orange', value: 1, selected: false },
+        { color: 'yellow', value: 1, selected: false },
+        { color: 'purple', value: 1, selected: false },
+      ],
     },
   },
 };
@@ -63,20 +74,60 @@ const gridFeature = createFeature({
       };
     }),
     on(gridActions.next_turn, (state, data) => {
-      debugger;
-      const players = [...state.roomState.players];
-      // replace the player object in `players` with the new one from data
-      const playerIndex = players.findIndex(
-        (x) => x.id === data.previousPlayer.id
-      );
-      players[playerIndex] = data.previousPlayer;
+      const players = [
+        ...state.roomState.players.map((x) => ({ ...x, turnOver: false })),
+      ];
 
       return {
         ...state,
         roomState: {
           ...state.roomState,
           turn: data.turn, // sets the new player as well as resets attempts
+          players,
+        },
+      };
+    }),
+    on(gridActions.roll_finalized, (state) => {
+      return {
+        ...state,
+        roomState: {
+          ...state.roomState,
+          turn: { ...state.roomState.turn, finalized: true },
+        },
+      };
+    }),
+    on(gridActions.player_set_entry, (state, player) => {
+      debugger;
+      const players = [...state.roomState.players];
+      // replace the player object in `players` with the new one from data
+      const playerIndex = players.findIndex((x) => x.id === player.id);
+      players[playerIndex] = player;
+
+      return {
+        ...state,
+        roomState: {
+          ...state.roomState,
           players, // includes new info about the previous player's sheet
+        },
+      };
+    }),
+    on(gridActions.recieve_die_selected, (state, die) => {
+      // debugger;
+      // const players = [...state.roomState.players];
+      // // replace the player object in `players` with the new one from data
+      // const playerIndex = players.findIndex((x) => x.id === player.id);
+      // players[playerIndex] = player;
+
+      return {
+        ...state,
+        roomState: {
+          ...state.roomState,
+          turn: {
+            ...state.roomState.turn,
+            diceState: state.roomState.turn.diceState.map((x) =>
+              x.color === die.color ? { ...x, selected: die.selected } : x
+            ),
+          },
         },
       };
     })
@@ -113,6 +164,14 @@ export const selectMyTurn = createSelector(
   gridFeature.selectPlayerID,
   (roomState, playerID) => {
     return roomState.turn.player?.id === playerID;
+  }
+);
+
+export const selectMyPlayer = createSelector(
+  gridFeature.selectRoomState,
+  gridFeature.selectPlayerID,
+  (roomState, playerID) => {
+    return roomState.players.find((x) => x.id === playerID) as IPlayer;
   }
 );
 

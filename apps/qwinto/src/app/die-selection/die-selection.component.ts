@@ -14,6 +14,7 @@ import {
   selectGameSettings,
   selectMyTurn,
 } from '../store/reducers';
+import { gridActions } from '../store/actions';
 
 @Component({
   standalone: true,
@@ -23,7 +24,7 @@ import {
   styleUrls: ['./die-selection.component.scss'],
 })
 export class DieSelectionComponent {
-  public dice: Array<IDie & { selected: boolean }> = [
+  public dice: Array<IDie> = [
     { color: 'orange', value: 1, selected: false },
     { color: 'yellow', value: 1, selected: false },
     { color: 'purple', value: 1, selected: false },
@@ -38,7 +39,6 @@ export class DieSelectionComponent {
 
   public $myTurn = this.store.selectSignal(selectMyTurn);
 
-  private intervalID;
   constructor(private socket: Socket, private store: Store) {
     // this.WebsocketService.messages.subscribe((msg) => {
     //   if (msg.action === 'rollDiceResponse') {
@@ -61,34 +61,49 @@ export class DieSelectionComponent {
   }
 
   public rollSelected() {
-    if (this.intervalID) {
-      return;
-    }
-
+    debugger;
     const selectedDice = this.dice.filter((x) => x.selected);
+    this.store.dispatch(gridActions.roll_attempt({ selected: selectedDice }));
 
-    // Start the interval with a constant rate (e.g., every 100 milliseconds)
-    this.intervalID = setInterval(() => {
-      this.simulateDiceRole(selectedDice);
-    }, 100);
+    // this.socket.emit(Events.ROLL_ATTEMPT, selectedDice, (data) => {
+    //   // todo: check to make sure samecolors come back. If not, throw an error
+    //   for (let die of data) {
+    //     let myDie = this.dice.find((x) => x.color === die.color);
+    //     if (myDie) {
+    //       myDie.value = die.value;
+    //     }
+    //   }
+    // });
 
-    setTimeout(() => {
-      clearInterval(this.intervalID);
-      this.intervalID = null;
-      this.socket.emit(Events.ROLL_ATTEMPT, selectedDice, (data) => {
-        // todo: check to make sure samecolors come back. If not, throw an error
-        for (let die of data) {
-          let myDie = this.dice.find((x) => x.color === die.color);
-          if (myDie) {
-            myDie.value = die.value;
-          }
-        }
-      });
-    }, 750);
+    // // Start the interval with a constant rate (e.g., every 100 milliseconds)
+    // this.intervalID = setInterval(() => {
+    //   this.simulateDiceRole(selectedDice);
+    // }, 100);
+
+    // setTimeout(() => {
+    //   clearInterval(this.intervalID);
+    //   this.intervalID = null;
+    //   this.socket.emit(Events.ROLL_ATTEMPT, selectedDice, (data) => {
+    //     // todo: check to make sure samecolors come back. If not, throw an error
+    //     for (let die of data) {
+    //       let myDie = this.dice.find((x) => x.color === die.color);
+    //       if (myDie) {
+    //         myDie.value = die.value;
+    //       }
+    //     }
+    //   });
+    // }, 750);
   }
 
-  public selectDie(die) {
+  public acceptRoll() {
+    this.socket.emit(Events.ACCEPT_ROLL);
+  }
+
+  public selectDie(die: IDie) {
     // todo: prevent selection if this is not the first attempt
-    die.selected = !die.selected;
+    console.log('Die Selected', die);
+    this.store.dispatch(
+      gridActions.dice_selected({ color: die.color, selected: !die.selected })
+    );
   }
 }

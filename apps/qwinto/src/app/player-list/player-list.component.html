@@ -11,6 +11,7 @@
       >
         {{ player.name }}
         <span *ngIf="player.isAdmin">⭐</span>
+        <span *ngIf="player.turnOver">✔️</span>
       </li>
     </ul>
   </ng-container>

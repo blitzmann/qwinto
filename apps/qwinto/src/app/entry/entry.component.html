@@ -1,4 +1,4 @@
 <div class="container" [class.bonus]="bonus">
-  <div></div>
+  <div [class]="{ disabled: !enabled }"></div>
 </div>
 <div class="value">{{ value }}</div>

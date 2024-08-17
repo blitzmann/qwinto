@@ -53,6 +53,9 @@
       border-radius: 50%;
     }
   }
+  & > .disabled {
+    display: none;
+  }
 }
 
 .value {

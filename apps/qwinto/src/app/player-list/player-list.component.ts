@@ -11,6 +11,7 @@ import {
   selectCurrentTurn,
   selectGridState,
   selectIsAdmin,
+  selectMyPlayer,
 } from '../store/reducers';
 
 @Component({

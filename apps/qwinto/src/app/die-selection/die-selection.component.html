@@ -1,11 +1,15 @@
 <ng-container *ngIf="data$ | async as data">
+  <div class="turn-indicator" [class]="data.myTurn ? 'mine' : 'other'">
+    {{ data.currentTurn?.player?.name }}'s Turn
+  </div>
   <div class="dice-container">
     <app-die
-      *ngFor="let die of dice"
+      *ngFor="let die of data.currentTurn.diceState"
       [class.selected]="die.selected"
       [value]="die.value"
       [color]="die.color"
-      (click)="selectDie(die)"
+      [class]="{ selectable: $myTurn() }"
+      (click)="$myTurn() && selectDie(die)"
     ></app-die>
   </div>
   <div *ngIf="data.myTurn">
@@ -16,6 +20,9 @@
       Roll
     </button>
     <span>{{ data.currentRollValue | json }}</span>
+    <button (click)="acceptRoll()" *ngIf="!data.currentTurn.finalized">
+      Accept
+    </button>
   </div>
   <div *ngIf="!data.myTurn">
     Current Turn: {{ data.currentTurn?.player?.name }} / {{ $myTurn() }}

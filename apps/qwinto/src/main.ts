@@ -13,6 +13,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { gridFeatureKey, gridReducer } from './app/store/reducers';
+import * as appEffects from './app/store/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,7 +21,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       SocketIoModule.forRoot({ url: 'http://localhost:3000', options: {} })
     ),
-    // provideEffects(gridEffects),
+    provideEffects(appEffects),
     provideState(gridFeatureKey, gridReducer),
     provideStore(),
     provideStoreDevtools({

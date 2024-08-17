@@ -1,13 +1,22 @@
 <ng-container *ngIf="data2$ | async as data2">
   <div class="row-container" [style.background-color]="data.color">
-    <!-- {{ data2.entries | json }} -->
     <div *ngFor="let entry of data2.entries; let i = index">
       <app-entry
         *ngIf="entry"
         [bonus]="entry.bonus"
         [value]="entry.value"
+        [enabled]="
+          !data2.currentTurn.finalized ||
+          (!data2.myPlayer.turnOver &&
+            data2.currentTurn.finalized &&
+            entry._selectable)
+        "
         (click)="entry._selectable && setRoll(i)"
-        [class.selectable]="data2.myTurn && entry._selectable"
+        [class.selectable]="
+          !data2.myPlayer.turnOver &&
+          data2.currentTurn.finalized &&
+          entry._selectable
+        "
       ></app-entry>
 
       <!-- If there is no entry, just add a blank element. This is needed for some weird positioning quirk -->

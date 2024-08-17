@@ -9,6 +9,9 @@ export enum Events {
 
   ROLL_ATTEMPT = 'roll_attempt',
   SET_ROLL = 'set_roll',
+  ACCEPT_ROLL = 'accept_roll',
+
+  RECIEVE_DIE_SELECTED = 'recieve_die_selected',
 }
 
 export enum ClientEvents {
@@ -22,4 +25,7 @@ export enum ClientEvents {
 
   PLAYER_ROLL = 'player_roll',
   NEXT_TURN = 'next_turn',
+  ROLL_FINALIZED = 'roll_finalized',
+  PLAYER_SET_ENTRY = 'player_set_entry',
+  DICE_SELECTED = 'dice_selected',
 }

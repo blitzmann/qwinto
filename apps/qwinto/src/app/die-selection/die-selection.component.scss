@@ -10,7 +10,9 @@ app-die {
   &.selected {
     transform: translateY(-20px);
   }
-  cursor: pointer;
+  &.selectable {
+    cursor: pointer;
+  }
 }
 
 :host {
@@ -19,4 +21,13 @@ app-die {
   background-color: #ffffff88;
   padding: 30px;
   margin: 0 auto;
+}
+
+.turn-indicator {
+  &.mine {
+    background-color: #00ff00;
+  }
+  &.others {
+    background-color: #949494;
+  }
 }

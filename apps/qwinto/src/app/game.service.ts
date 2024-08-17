@@ -38,11 +38,23 @@ export class GameService {
     });
     this.socket.on(ClientEvents.PLAYER_ROLL, (data) => {
       debugger;
+
+      console.log('<- Player roll attempt', data);
       this.store.dispatch(gridActions.player_roll(data));
+    });
+    this.socket.on(Events.RECIEVE_DIE_SELECTED, (data) => {
+      console.log('<- Dice selected', data);
+      this.store.dispatch(gridActions.recieve_die_selected(data));
     });
     this.socket.on(ClientEvents.NEXT_TURN, (data) => {
       debugger;
       this.store.dispatch(gridActions.next_turn(data));
+    });
+    this.socket.on(ClientEvents.ROLL_FINALIZED, () => {
+      this.store.dispatch(gridActions.roll_finalized());
+    });
+    this.socket.on(ClientEvents.PLAYER_SET_ENTRY, (player) => {
+      this.store.dispatch(gridActions.player_set_entry(player));
     });
   }
 

@@ -189,22 +189,67 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return; // todo: error
     }
 
+    // check to see if this is the first attempt, in which case we will use the dice the player provides. Otherwise, we will reuse the previous dice
+    // This will prevent the player from sending in different dice colors than first attempt
+    let dice: IDie[];
+    if (room.turn.attempt.num === 0) {
+      dice = data;
+    } else {
+      dice = room.turn.attempt.values as IDie[];
+    }
+
     // generate random values
-    data.forEach((die) => (die.value = Math.floor(Math.random() * 6) + 1));
+    dice.forEach((die) => (die.value = Math.floor(Math.random() * 6) + 1));
 
     room.turn.attempt = {
       num: room.turn.attempt.num + 1,
-      values: data,
+      values: dice,
     };
+
+    if (room.turn.attempt.num >= room.settings.rollAttempts) {
+      // auto-finalize the roll
+      room.turn.finalized = true;
+      this.server.to(room.code).emit(ClientEvents.ROLL_FINALIZED);
+    }
     // save room
     this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
 
     this.server.to(room.code).emit(ClientEvents.PLAYER_ROLL, room.turn.attempt);
   }
 
-  @SubscribeMessage(Events.SET_ROLL)
-  async setRoll(
-    @MessageBody() data: { rowKey: string; entryIdx: number },
+  @SubscribeMessage(Events.ACCEPT_ROLL)
+  async acceptRoll(@ConnectedSocket() client: Socket) {
+    // ensure that turn can be attempted.
+    const roomCode = await this.cacheManager.get<string>(`client-${client.id}`);
+    if (!roomCode) {
+      return; // todo: error
+    }
+    const room = await this.cacheManager.get<IRoom>(roomCode);
+
+    if (!room) {
+      return; // todo: error
+    }
+
+    const player = room.players.find((x) => x.socketID == client.id);
+    if (!player) {
+      return; // todo: error
+    }
+
+    if (room.turn.player?.id !== player.id) {
+      return; // todo: error
+    }
+
+    room.turn.finalized = true;
+
+    // save room
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
+
+    this.server.to(room.code).emit(ClientEvents.ROLL_FINALIZED);
+  }
+
+  @SubscribeMessage(ClientEvents.DICE_SELECTED)
+  async dieSelected(
+    @MessageBody() data: Pick<IDie, 'color' | 'selected'>,
     @ConnectedSocket() client: Socket
   ) {
     // ensure that turn can be attempted.
@@ -227,6 +272,43 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return; // todo: error
     }
 
+    const die = room.turn.diceState.find((x) => x.color === data.color) as IDie;
+    die.selected = data.selected;
+
+    // save room
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
+    console.log('Emitting dice selected');
+    await client.to(room.code).emit(Events.RECIEVE_DIE_SELECTED, data);
+  }
+
+  @SubscribeMessage(Events.SET_ROLL)
+  async setRoll(
+    @MessageBody() data: { rowKey: string; entryIdx: number },
+    @ConnectedSocket() client: Socket
+  ) {
+    // ensure that turn can be attempted.
+    const roomCode = await this.cacheManager.get<string>(`client-${client.id}`);
+    if (!roomCode) {
+      return; // todo: error
+    }
+    let room = await this.cacheManager.get<IRoom>(roomCode);
+
+    if (!room) {
+      return; // todo: error
+    }
+
+    if (!room.turn.finalized) {
+      return; // todo: error
+    }
+
+    const player = room.players.find((x) => x.socketID == client.id);
+    if (!player) {
+      return; // todo: error
+    }
+    if (player.turnOver) {
+      console.log('Player has already set their entry');
+      return; // todo: error
+    }
     const matrix = calculateSelectableEntries(room.turn.attempt, player.sheet);
 
     if (
@@ -247,12 +329,25 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       ?.map((x) => x.value)
       .reduce((acc, x) => acc + x, 0) as number;
 
+    player.turnOver = true;
+    this.server.to(room.code).emit(ClientEvents.PLAYER_SET_ENTRY, player);
+    this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
+
+    // get fresh cache of room in case something has happened
+    room = (await this.cacheManager.get<IRoom>(roomCode)) as IRoom;
+    // determine if all players have set their entry
+    if (!room.players.every((x) => x.turnOver)) {
+      return;
+    }
+
     // set a new player for the next turn
     const currentPlayerIndex = room.players.findIndex(
-      (x) => x.id === player.id
+      (x) => x.id === room.turn.player?.id
     );
     const nextPlayerIndex = currentPlayerIndex + 1;
     room.turn = {
+      ...room.turn,
+      finalized: false,
       player: room.players[nextPlayerIndex % room.players.length],
       attempt: {
         num: 0,
@@ -260,15 +355,15 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       },
     };
 
+    room.players.forEach((x) => (x.turnOver = false));
+
     // save room
     this.cacheManager.set(room.code, room, 1000 * 60 * 60 * 24); // 12 hours
 
-    this.server
-      .to(room.code)
-      .emit(ClientEvents.NEXT_TURN, {
-        turn: room.turn,
-        previousPlayer: player,
-      });
+    this.server.to(room.code).emit(ClientEvents.NEXT_TURN, {
+      turn: room.turn,
+      previousPlayer: player,
+    });
   }
 
   @SubscribeMessage('identity')
@@ -303,13 +398,19 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       players: [],
       gameStarted: false,
       settings: {
-        rollAttempts: 15,
+        rollAttempts: 20,
       },
       turn: {
+        finalized: false,
         attempt: {
           num: 0,
           values: null,
         },
+        diceState: [
+          { color: 'orange', value: 1, selected: false },
+          { color: 'yellow', value: 1, selected: false },
+          { color: 'purple', value: 1, selected: false },
+        ],
         player: null,
       },
     };
@@ -326,6 +427,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       isAdmin: false,
       joined: new Date(),
       sheet: this.generateGameSheet(),
+      turnOver: false,
     };
     // player.setSocket(socket);
     // prevents _socket from being serialized

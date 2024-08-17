@@ -10,5 +10,6 @@ import { Component, Input } from '@angular/core';
 })
 export class EntryComponent {
   @Input() bonus: boolean | undefined = false;
+  @Input() enabled: boolean | undefined = false;
   @Input() value: number | null = null;
 }

@@ -11,8 +11,11 @@ export interface IAttempt {
 }
 
 export interface ITurn {
+  finalized: boolean;
   attempt: IAttempt;
   player: IPlayer | null;
+  /** State of the dice on the table */
+  diceState: Array<IDie>;
 }
 
 export interface IRoom {
@@ -34,6 +37,7 @@ export interface IPlayer {
   isAdmin: boolean;
   joined: Date;
   sheet: IPlayerSheet;
+  turnOver: boolean;
 }
 
 export interface IPlayerSheet {
@@ -55,4 +59,5 @@ export type dieColors = 'purple' | 'yellow' | 'orange';
 export interface IDie {
   color: dieColors;
   value: number;
+  selected: boolean;
 }
